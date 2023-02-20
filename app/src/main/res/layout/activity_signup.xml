@@ -75,7 +75,7 @@
         android:padding="5dip" />
 
     <TextView
-        android:id="@+id/loginsignup_signup_text"
+        android:id="@+id/signup_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
@@ -113,7 +113,7 @@
         android:padding="5dip" />
 
     <Button
-        android:id="@+id/signup_button"
+        android:id="@+id/btnLogin"
         android:layout_width="280dp"
         android:layout_height="40dp"
         android:layout_gravity="center"

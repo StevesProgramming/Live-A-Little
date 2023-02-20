@@ -3,7 +3,6 @@ package com.example.live_a_little
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -32,7 +31,7 @@ class Signup : AppCompatActivity() {
         etPassword = findViewById(R.id.passwordInput)
         etConfirmPassword = findViewById(R.id.confirmPasswordInput)
 
-        btnSignup = findViewById(R.id.signup_button)
+        btnSignup = findViewById(R.id.btnLogin)
         btnBack= findViewById(R.id.signup_back_button)
         dbRef = FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
 
@@ -75,8 +74,8 @@ class Signup : AppCompatActivity() {
                     Toast.makeText(this, "Error ${err.message}", Toast.LENGTH_LONG).show()
                 }
 
-//                val intent = Intent(this, Login::class.java)
-//                startActivity(intent)
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
             else if (password != confirmPassword) {
                 etConfirmPassword.error = "Passwords do not match"
