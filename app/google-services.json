@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "89141669343",
+    "project_id": "live-a-little",
+    "storage_bucket": "live-a-little.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89141669343:android:2fc2077e18f93141e7e86a",
+        "android_client_info": {
+          "package_name": "com.example.live_a_little"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89141669343-a972mbuhlo9362k7sq6j0hcgc5tb9bgd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCFvjHipB2DSEldxS_pDglQPIUxoZO3p4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89141669343-a972mbuhlo9362k7sq6j0hcgc5tb9bgd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
