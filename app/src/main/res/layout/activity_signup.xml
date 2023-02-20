@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".signup"
+    tools:context=".Signup"
     android:background="@drawable/background_gradient"
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/signup_back_button"
         android:layout_width="91dp"
         android:layout_height="40dp"
         android:layout_margin="10dp"
@@ -29,7 +29,7 @@
         android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/usernameEditText"
+        android:id="@+id/usernameInput"
         android:layout_width="280dp"
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
@@ -48,7 +48,7 @@
         android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/emailInput"
         android:layout_width="280dp"
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
@@ -67,7 +67,7 @@
         android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/confirmEmailEditText"
+        android:id="@+id/confirmEmailInput"
         android:layout_width="280dp"
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
@@ -86,7 +86,7 @@
         android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/passwordInput"
         android:layout_width="280dp"
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
@@ -105,7 +105,7 @@
         android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/confirmPasswordEditText"
+        android:id="@+id/confirmPasswordInput"
         android:layout_width="280dp"
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
@@ -113,7 +113,7 @@
         android:padding="5dip" />
 
     <Button
-        android:id="@+id/loginsignup_login_button"
+        android:id="@+id/signup_button"
         android:layout_width="280dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
