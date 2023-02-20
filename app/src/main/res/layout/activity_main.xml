@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        app:srcCompat="@drawable/BoulderLogo" />
+        app:srcCompat="@drawable/logo" />
 
     <TextView
         android:id="@+id/textView"
@@ -58,7 +58,7 @@
         android:padding="5dip" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/loginsignup_login_button"
         android:layout_width="280dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
@@ -92,7 +92,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/loginsignup_signup_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
