@@ -34,6 +34,7 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
+        android:fontFamily="@font/inter"
         android:padding="5dip" />
 
     <TextView
@@ -53,6 +54,7 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
+        android:fontFamily="@font/inter"
         android:padding="5dip" />
 
     <Button
@@ -62,6 +64,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:background="@drawable/button"
+        android:fontFamily="@font/inter"
         android:text="@string/login"
         app:backgroundTint="@null" />
 

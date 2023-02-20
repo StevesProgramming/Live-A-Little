@@ -14,6 +14,7 @@
         android:layout_height="40dp"
         android:layout_margin="10dp"
         android:background="@drawable/button"
+        android:fontFamily="@font/inter"
         android:text="@string/back"
         app:backgroundTint="@null" />
 
@@ -34,6 +35,7 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
+        android:fontFamily="@font/inter"
         android:padding="5dip" />
 
     <TextView
@@ -53,6 +55,7 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
+        android:fontFamily="@font/inter"
         android:padding="5dip" />
 
     <TextView
@@ -72,6 +75,7 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
+        android:fontFamily="@font/inter"
         android:padding="5dip" />
 
     <TextView
@@ -91,6 +95,7 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
+        android:fontFamily="@font/inter"
         android:padding="5dip" />
 
     <TextView
@@ -110,6 +115,7 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
+        android:fontFamily="@font/inter"
         android:padding="5dip" />
 
     <Button
@@ -119,6 +125,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="40dp"
         android:background="@drawable/button"
+        android:fontFamily="@font/inter"
         android:text="@string/sign_up"
         app:backgroundTint="@null" />
 
