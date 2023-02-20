@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">Live-A-Little</string>
+    <string name="app_name">AP2_Project</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="email">Email</string>
+    <string name="confirm_email">Confirm Email</string>
+    <string name="login">Login</string>
+    <string name="sign_up_underline"><u>Sign up</u></string>
+    <string name="sign_up">Sign up</string>
+    <string name="back">Back</string>
+    <string name="achievementTitle">Achievement Title</string>
+    <string name="achievementDesc">Achievement Description</string>
 </resources>
