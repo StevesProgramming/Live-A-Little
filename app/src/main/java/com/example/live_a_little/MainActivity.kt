@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         etUsername = findViewById(R.id.usernameInput)
         etPassword = findViewById(R.id.passwordInput)
-        dbRef = FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app").getReference("Users")
+        dbRef = FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
 
         btnLogin= findViewById(R.id.btnLogin)
         txtSignup = findViewById(R.id.signup_text)
