@@ -4,51 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
+    android:background="#50A0FF"
     android:orientation="vertical"
     android:paddingTop="13dp"
     tools:context=".Signup">
 
-    <LinearLayout
-        android:layout_width="400dp"
-        android:layout_height="55dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/top_nav_background"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/incomplete_button"
-            android:layout_width="187dp"
-            android:layout_height="46dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/frag_button_selected"
-            android:text="@string/incomplete" />
-
-        <Button
-            android:id="@+id/complete_button"
-            android:layout_width="187dp"
-            android:layout_height="46dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/frag_button_selected"
-            android:text="@string/complete" />
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="513dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/card_design">
-
-    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -106,7 +66,7 @@
             android:layout_width="136dp"
             android:layout_height="5dp"
             android:layout_marginLeft="2dp"
-            android:background="@color/tab_colour"
+            android:background="@color/button_blue"
             android:paddingLeft="50dp"
             android:paddingTop="15dp" />
 
@@ -116,6 +76,7 @@
             android:layout_height="5dp"
             android:layout_marginLeft="1dp"
             android:background="#0075FF"
+            android:backgroundTint="@color/tab_colour"
             android:paddingLeft="50dp"
             android:paddingTop="15dp" />
     </LinearLayout>
