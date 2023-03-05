@@ -11,4 +11,6 @@
     <string name="back">Back</string>
     <string name="achievementTitle">Achievement Title</string>
     <string name="achievementDesc">Achievement Description</string>
+    <string name="complete">Complete</string>
+    <string name="incomplete">Incomplete</string>
 </resources>
