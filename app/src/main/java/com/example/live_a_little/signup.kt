@@ -31,7 +31,7 @@ class Signup : AppCompatActivity() {
         etPassword = findViewById(R.id.passwordInput)
         etConfirmPassword = findViewById(R.id.confirmPasswordInput)
 
-        btnSignup = findViewById(R.id.btnLogin)
+        btnSignup = findViewById(R.id.btnLogout)
         btnBack= findViewById(R.id.signup_back_button)
         dbRef = FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
 

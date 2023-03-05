@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() {
         etPassword = findViewById(R.id.passwordInput)
         dbRef = FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
 
-        btnLogin= findViewById(R.id.btnLogin)
-        txtSignup = findViewById(R.id.signup_text)
+        btnLogin= findViewById(R.id.btnLogout)
+        txtSignup = findViewById(R.id.delete_account_text)
 
         btnLogin.setOnClickListener{
             login()
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                         var dbPassword = i.child("password").value
 
                         if(username == dbUsername && password == dbPassword){
-                            openAchievements()
+                            openHome()
                         }
                     }
                 }
@@ -69,8 +69,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun openAchievements(){
-        val intent = Intent(this, Achievements::class.java)
+    fun openHome(){
+        val intent = Intent(this, Home::class.java)
         startActivity(intent)
     }
 }

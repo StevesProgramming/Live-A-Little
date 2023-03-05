@@ -1,12 +1,17 @@
 package com.example.live_a_little
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import androidx.recyclerview.widget.LinearLayoutManager
 
 class Achievements : AppCompatActivity() {
+
+    private lateinit var btnHome: ImageButton
+    private lateinit var btnProfile: ImageButton
 
     private lateinit var recyclerView: RecyclerView
     private var achievementNameList = ArrayList<String>()
@@ -17,6 +22,18 @@ class Achievements : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_achievements)
+
+        // Initalise Navigation
+        btnHome= findViewById(R.id.home_button)
+        btnProfile= findViewById(R.id.profile_button)
+
+        btnHome.setOnClickListener{
+            openHome()
+        }
+
+        btnProfile.setOnClickListener{
+            openProfile()
+        }
 
         // Initalise recycle view and adapter
         recyclerView = findViewById(R.id.recyclerView)
@@ -49,5 +66,15 @@ class Achievements : AppCompatActivity() {
 
             }
         })
+    }
+
+    private fun openHome(){
+        val intent = Intent(this, Home::class.java)
+        startActivity(intent)
+    }
+
+    private fun openProfile(){
+        val intent = Intent(this, Profile::class.java)
+        startActivity(intent)
     }
 }
