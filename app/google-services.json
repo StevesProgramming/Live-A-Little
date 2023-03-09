@@ -1,33 +1,71 @@
 {
   "project_info": {
-    "project_number": "89141669343",
-    "project_id": "live-a-little",
-    "storage_bucket": "live-a-little.appspot.com"
+    "project_number": "831112258489",
+    "firebase_url": "https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "project-cw-34e62",
+    "storage_bucket": "project-cw-34e62.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:89141669343:android:2fc2077e18f93141e7e86a",
+        "mobilesdk_app_id": "1:831112258489:android:e2ac214f0cc33ff1004c68",
         "android_client_info": {
           "package_name": "com.example.live_a_little"
         }
       },
       "oauth_client": [
         {
-          "client_id": "89141669343-a972mbuhlo9362k7sq6j0hcgc5tb9bgd.apps.googleusercontent.com",
+          "client_id": "831112258489-0q1hl211ro93q347co5lic7on0of7tol.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.live_a_little",
+            "certificate_hash": "06fa377fb46f83b28841ccb4475bae7e5511295d"
+          }
+        },
+        {
+          "client_id": "831112258489-9bcqm528i0fhvorue7qtaa1ce1jo5ue2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDCFvjHipB2DSEldxS_pDglQPIUxoZO3p4"
+          "current_key": "AIzaSyC3pQ9dApKVx_hrOKYIQT5XhQcB5X9kbNY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "89141669343-a972mbuhlo9362k7sq6j0hcgc5tb9bgd.apps.googleusercontent.com",
+              "client_id": "831112258489-9bcqm528i0fhvorue7qtaa1ce1jo5ue2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831112258489:android:0e6ad755f737538d004c68",
+        "android_client_info": {
+          "package_name": "com.example.project_cw"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831112258489-9bcqm528i0fhvorue7qtaa1ce1jo5ue2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3pQ9dApKVx_hrOKYIQT5XhQcB5X9kbNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831112258489-9bcqm528i0fhvorue7qtaa1ce1jo5ue2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
