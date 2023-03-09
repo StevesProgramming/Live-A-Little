@@ -92,7 +92,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/delete_account_text"
+            android:id="@+id/txtSignup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import com.google.firebase.database.*
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnLogin: Button
@@ -18,6 +20,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var etPassword: EditText
     private lateinit var dbRef: DatabaseReference
 
+    private lateinit var firebaseAuth: FirebaseAuth
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +29,11 @@ class MainActivity : AppCompatActivity() {
 
         etUsername = findViewById(R.id.usernameInput)
         etPassword = findViewById(R.id.passwordInput)
-        dbRef = FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
+        dbRef = FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app")
+            .getReference("users")
 
         btnLogin= findViewById(R.id.btnLogout)
-        txtSignup = findViewById(R.id.delete_account_text)
+        txtSignup = findViewById(R.id.txtSignup)
 
         btnLogin.setOnClickListener{
             login()
@@ -40,37 +45,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun login(){
-        val username = etUsername.text.toString()
+    private fun login(){
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        val email = etUsername.text.toString()
         val password = etPassword.text.toString()
 
-        if (username.isEmpty()) {
+        if (email.isEmpty()) {
             etUsername.error = "Please enter a username"
         } else if (password.isEmpty()) {
             etPassword.error = "Please enter a password"
         }
         else {
-            //Get Data
-            var getData = object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError){}
-                override fun onDataChange(p0: DataSnapshot){
-                    for(i in p0.children){
-                        var dbUsername = i.child("username").value
-                        var dbPassword = i.child("password").value
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{
+                if(it.isSuccessful){
+                    Toast.makeText(this, "Login Successful", Toast.LENGTH_LONG).show()
 
-                        if(username == dbUsername && password == dbPassword){
-                            openHome()
-                        }
-                    }
+                    val intent = Intent(this, Home::class.java)
+                    startActivity(intent)
+                }
+                else{
+                    Toast.makeText(this, it.exception.toString(), Toast.LENGTH_LONG).show()
                 }
             }
-            dbRef.addValueEventListener(getData)
-            dbRef.addListenerForSingleValueEvent(getData)
         }
     }
-
-    fun openHome(){
-        val intent = Intent(this, Home::class.java)
-        startActivity(intent)
-    }
 }
+
