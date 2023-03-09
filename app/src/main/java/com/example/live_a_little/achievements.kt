@@ -1,10 +1,12 @@
 package com.example.live_a_little
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import androidx.recyclerview.widget.LinearLayoutManager
 
@@ -17,13 +19,18 @@ class Achievements : AppCompatActivity() {
     private var achievementNameList = ArrayList<String>()
     private var achievementDescList = ArrayList<String>()
     private lateinit var adapter: AchievementsAdapter
-    private lateinit var dbRef: DatabaseReference
+
+    private lateinit var achievementDbRef: DatabaseReference
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_achievements)
 
-        // Initalise Navigation
+        // Initialise Firebase Authentication
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        // Initialise Navigation
         btnHome= findViewById(R.id.home_button)
         btnProfile= findViewById(R.id.profile_button)
 
@@ -35,37 +42,49 @@ class Achievements : AppCompatActivity() {
             openProfile()
         }
 
-        // Initalise recycle view and adapter
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this@Achievements)
-        adapter = AchievementsAdapter(achievementNameList, achievementDescList, this@Achievements)
-        recyclerView.adapter = adapter
+        // Check the user is logged in
+        if (firebaseAuth.currentUser != null) {
 
+            // Initialise recycle view and adapter
+            recyclerView = findViewById(R.id.recyclerView)
+            recyclerView.layoutManager = LinearLayoutManager(this@Achievements)
+            adapter = AchievementsAdapter(achievementNameList, achievementDescList, this@Achievements)
+            recyclerView.adapter = adapter
 
-        // Get data from the firebase realtime database
-        dbRef =
-            FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Achievements")
+            achievementDbRef =
+                FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app/")
+                    .getReference("achievements")
 
-        dbRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (i in dataSnapshot.children) {
-                    var achievementName = i.child("name").getValue(String::class.java)
-                    var achievementDesc = i.child("description").getValue(String::class.java)
+            achievementDbRef.addValueEventListener(object : ValueEventListener {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (i in dataSnapshot.children) {
+                        var achievementName = i.child("name").getValue(String::class.java)
+                        var achievementDesc = i.child("description").getValue(String::class.java)
 
-                    if (achievementName != null && achievementDesc != null) {
-                        achievementNameList.add(achievementName)
-                        achievementDescList.add(achievementDesc)
+                        if (achievementName != null && achievementDesc != null) {
+                            achievementNameList.add(achievementName)
+                            achievementDescList.add(achievementDesc)
+                        }
                     }
+
+                    adapter.notifyDataSetChanged()
+
                 }
 
-                adapter.notifyDataSetChanged()
-            }
+                override fun onCancelled(error: DatabaseError) {
 
-            override fun onCancelled(error: DatabaseError) {
+                }
+            })
+        } else {
+            openLogin()
+            finish()
+        }
+    }
 
-            }
-        })
+    private fun openLogin(){
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun openHome(){
