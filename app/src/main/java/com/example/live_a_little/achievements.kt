@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -14,6 +16,9 @@ class Achievements : AppCompatActivity() {
 
     private lateinit var btnHome: ImageButton
     private lateinit var btnProfile: ImageButton
+
+    private lateinit var btnComplete: Button
+    private lateinit var btnIncomplete: Button
 
     private lateinit var recyclerView: RecyclerView
     private var achievementNameList = ArrayList<String>()
@@ -30,9 +35,29 @@ class Achievements : AppCompatActivity() {
         // Initialise Firebase Authentication
         firebaseAuth = FirebaseAuth.getInstance()
 
-        // Initialise Navigation
+        // Initialise Top Navigation
+        btnComplete= findViewById(R.id.complete_button)
+        btnIncomplete= findViewById(R.id.incomplete_button)
+
+        // Initialise Bottom Navigation
         btnHome= findViewById(R.id.home_button)
         btnProfile= findViewById(R.id.profile_button)
+
+        btnComplete.setOnClickListener{
+            btnComplete.setBackgroundResource(R.drawable.frag_button_selected)
+            btnComplete.setTextColor(ContextCompat.getColor(this, R.color.white))
+
+            btnIncomplete.setBackgroundResource(R.drawable.frag_button_unselected)
+            btnIncomplete.setTextColor(ContextCompat.getColor(this, R.color.black))
+        }
+
+        btnIncomplete.setOnClickListener{
+            btnIncomplete.setBackgroundResource(R.drawable.frag_button_selected)
+            btnIncomplete.setTextColor(ContextCompat.getColor(this, R.color.white))
+
+            btnComplete.setBackgroundResource(R.drawable.frag_button_unselected)
+            btnComplete.setTextColor(ContextCompat.getColor(this, R.color.black))
+        }
 
         btnHome.setOnClickListener{
             openHome()
