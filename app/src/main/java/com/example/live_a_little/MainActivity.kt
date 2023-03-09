@@ -60,15 +60,18 @@ class MainActivity : AppCompatActivity() {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{
                 if(it.isSuccessful){
                     Toast.makeText(this, "Login Successful", Toast.LENGTH_LONG).show()
-
-                    val intent = Intent(this, Home::class.java)
-                    startActivity(intent)
+                    openHome()
                 }
                 else{
                     Toast.makeText(this, it.exception.toString(), Toast.LENGTH_LONG).show()
                 }
             }
         }
+    }
+
+    private fun openHome(){
+        val intent = Intent(this, Home::class.java)
+        startActivity(intent)
     }
 }
 
