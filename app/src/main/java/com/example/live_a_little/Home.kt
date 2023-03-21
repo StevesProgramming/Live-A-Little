@@ -7,10 +7,8 @@ import android.widget.Button
 import android.widget.ImageButton
 
 class Home : AppCompatActivity() {
-
     private lateinit var btnAchievement: ImageButton
     private lateinit var btnProfile: ImageButton
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -25,7 +23,6 @@ class Home : AppCompatActivity() {
         btnProfile.setOnClickListener{
             openProfile()
         }
-
     }
 
     private fun openAchievements(){
