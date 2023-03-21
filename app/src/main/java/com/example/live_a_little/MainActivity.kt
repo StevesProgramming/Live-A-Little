@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnLogin: Button
     private lateinit var txtSignup: TextView
 
-    private lateinit var etUsername: EditText
+    private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var dbRef: DatabaseReference
 
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        etUsername = findViewById(R.id.usernameInput)
+        etEmail = findViewById(R.id.emailInput)
         etPassword = findViewById(R.id.passwordInput)
         dbRef = FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app")
             .getReference("users")
@@ -48,11 +48,11 @@ class MainActivity : AppCompatActivity() {
     private fun login(){
         firebaseAuth = FirebaseAuth.getInstance()
 
-        val email = etUsername.text.toString()
+        val email = etEmail.text.toString()
         val password = etPassword.text.toString()
 
         if (email.isEmpty()) {
-            etUsername.error = "Please enter a username"
+            etEmail.error = "Please enter an email"
         } else if (password.isEmpty()) {
             etPassword.error = "Please enter a password"
         }
