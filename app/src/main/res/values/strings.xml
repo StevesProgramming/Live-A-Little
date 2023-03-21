@@ -6,6 +6,7 @@
     <string name="email">Email</string>
     <string name="confirm_email">Confirm Email</string>
     <string name="login">Login</string>
+    <string name="logout">Log out</string>
     <string name="sign_up_underline"><u>Sign up</u></string>
     <string name="sign_up">Sign up</string>
     <string name="back">Back</string>

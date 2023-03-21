@@ -11,6 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.live_a_little.R
 import de.hdodenhof.circleimageview.CircleImageView
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+
 class AchievementsAdapter(
     var titleNameList: ArrayList<String>,
     var descList: ArrayList<String>,
