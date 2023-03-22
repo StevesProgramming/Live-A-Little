@@ -15,4 +15,6 @@
     <string name="complete">Complete</string>
     <string name="incomplete">Incomplete</string>
     <string name="delete_account"><u>Delete Account</u></string>
+    <string name="delete">Delete</string>
+    <string name="friends_list">Friends List</string>
 </resources>
