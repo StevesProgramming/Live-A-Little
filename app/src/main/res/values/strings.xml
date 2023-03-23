@@ -17,4 +17,7 @@
     <string name="delete_account"><u>Delete Account</u></string>
     <string name="delete">Delete</string>
     <string name="friends_list">Friends List</string>
+    <string name="remove">Remove</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
 </resources>

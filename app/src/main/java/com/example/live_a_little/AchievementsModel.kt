@@ -16,7 +16,7 @@ data class AchievementsModel(
         achievement_document.getString("data.name")?: "",
         achievement_document.getString("data.description")?: "",
         achievement_document.getBoolean("data.complete")?: false,
-        achievement_document.getLong("goal")?.toInt() ?: 0,
-        achievement_document.getLong("successful_completions")?.toInt() ?: 0
+        achievement_document.getLong("data.goal")?.toInt() ?: 0,
+        achievement_document.getLong("data.successful_completions")?.toInt() ?: 0
     )
 }

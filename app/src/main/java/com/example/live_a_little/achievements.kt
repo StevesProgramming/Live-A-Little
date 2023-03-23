@@ -26,6 +26,9 @@ class Achievements : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private var achievementNameList = ArrayList<String>()
     private var achievementDescList = ArrayList<String>()
+    private var achievementCompleteList = ArrayList<Boolean>()
+    private var achievementGoalList = ArrayList<Int>()
+    private var achievementSuccessfulCompletionList = ArrayList<Int>()
     private lateinit var adapter: AchievementsAdapter
     private lateinit var achievementDbRef: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
@@ -108,12 +111,16 @@ class Achievements : AppCompatActivity() {
 
         achievementNameList.clear()
         achievementDescList.clear()
+        achievementCompleteList.clear()
+        achievementGoalList.clear()
+        achievementSuccessfulCompletionList.clear()
 
         // Initialise recycle view and adapter
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this@Achievements)
 
-        adapter = AchievementsAdapter(achievementNameList, achievementDescList, this@Achievements)
+        adapter = AchievementsAdapter(achievementNameList, achievementDescList, achievementCompleteList,
+            achievementGoalList, achievementSuccessfulCompletionList,this@Achievements)
         recyclerView.adapter = adapter
 
         achievements
@@ -123,20 +130,29 @@ class Achievements : AppCompatActivity() {
                     for (document in achievement_documents.result) {
                         val achievement_data = AchievementsModel(document)
                         val achievement_is_complete = achievement_data.complete
+
                         val achievementName = achievement_data.name
                         val achievementDesc = achievement_data.description
+                        val achievementComplete = achievement_data.complete
+                        val achievementGoal = achievement_data.goal
+                        val achievementSuccessfulCompletion = achievement_data.successful_completions
 
                         if (achievementName != null && achievementDesc != null) {
                             if(currentList == "incomplete" && achievement_is_complete == false){
                                     achievementNameList.add(achievementName)
                                     achievementDescList.add(achievementDesc)
+                                    achievementCompleteList.add(achievementComplete)
+                                    achievementGoalList.add(achievementGoal)
+                                    achievementSuccessfulCompletionList.add(achievementSuccessfulCompletion)
                             }
                             else if(currentList == "complete" && achievement_is_complete == true){
                                     achievementNameList.add(achievementName)
                                     achievementDescList.add(achievementDesc)
+                                    achievementCompleteList.add(achievementComplete)
+                                    achievementGoalList.add(achievementGoal)
+                                    achievementSuccessfulCompletionList.add(achievementSuccessfulCompletion)
                             }
                         }
-
                     }
                     adapter.notifyDataSetChanged()
                 }
