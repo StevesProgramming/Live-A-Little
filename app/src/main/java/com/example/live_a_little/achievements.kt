@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -24,6 +23,7 @@ class Achievements : AppCompatActivity() {
     private lateinit var btnComplete: Button
     private lateinit var btnIncomplete: Button
     private lateinit var recyclerView: RecyclerView
+    private var achievementIDList = ArrayList<String>()
     private var achievementNameList = ArrayList<String>()
     private var achievementDescList = ArrayList<String>()
     private var achievementCompleteList = ArrayList<Boolean>()
@@ -109,6 +109,7 @@ class Achievements : AppCompatActivity() {
         val achievements = db.collection("users").document(user_id)
             .collection("user_achievements")
 
+        achievementIDList.clear()
         achievementNameList.clear()
         achievementDescList.clear()
         achievementCompleteList.clear()
@@ -120,7 +121,7 @@ class Achievements : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this@Achievements)
 
         adapter = AchievementsAdapter(achievementNameList, achievementDescList, achievementCompleteList,
-            achievementGoalList, achievementSuccessfulCompletionList,this@Achievements)
+            achievementGoalList, achievementSuccessfulCompletionList, achievementIDList, this@Achievements)
         recyclerView.adapter = adapter
 
         achievements
@@ -129,23 +130,25 @@ class Achievements : AppCompatActivity() {
                 if (achievement_documents.isSuccessful) {
                     for (document in achievement_documents.result) {
                         val achievement_data = AchievementsModel(document)
-                        val achievement_is_complete = achievement_data.complete
 
                         val achievementName = achievement_data.name
                         val achievementDesc = achievement_data.description
                         val achievementComplete = achievement_data.complete
                         val achievementGoal = achievement_data.goal
                         val achievementSuccessfulCompletion = achievement_data.successful_completions
+                        val achievementId = document.id
 
                         if (achievementName != null && achievementDesc != null) {
-                            if(currentList == "incomplete" && achievement_is_complete == false){
+                            if(currentList == "incomplete" && achievementComplete == false){
+                                    achievementIDList.add(achievementId)
                                     achievementNameList.add(achievementName)
                                     achievementDescList.add(achievementDesc)
                                     achievementCompleteList.add(achievementComplete)
                                     achievementGoalList.add(achievementGoal)
                                     achievementSuccessfulCompletionList.add(achievementSuccessfulCompletion)
                             }
-                            else if(currentList == "complete" && achievement_is_complete == true){
+                            else if(currentList == "complete" && achievementComplete == true){
+                                    achievementIDList.add(achievementId)
                                     achievementNameList.add(achievementName)
                                     achievementDescList.add(achievementDesc)
                                     achievementCompleteList.add(achievementComplete)
@@ -159,6 +162,6 @@ class Achievements : AppCompatActivity() {
                 else{
                     Log.d(TAG, "Error getting documents: ", achievement_documents.exception)
                 }
-            }
-    }
+        }
+     }
 }
