@@ -75,11 +75,12 @@ class Signup : AppCompatActivity() {
             if(password == confirmPassword && email == confirmEmail){
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{
                     val user_id = firebaseAuth.uid.toString();
-                    val user_name = firebaseAuth.currentUser?.displayName.toString()
+                    val user_name = username
                     val user_email = firebaseAuth.currentUser?.email.toString()
+
                     val user_details = hashMapOf(
-                        username to user_name,
-                        email to user_email
+                        "username" to user_name,
+                        "email" to user_email
                     )
 
                     if(it.isSuccessful){
