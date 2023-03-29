@@ -29,6 +29,8 @@ class AchievementsAdapter(
     var context: Context) : RecyclerView.Adapter<AchievementsAdapter.AchievementViewHolder>() {
 
     private lateinit var firebaseAuth: FirebaseAuth
+    var adapter: AchievementsAdapter? = null
+
     class AchievementViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textViewTitle: TextView = itemView.findViewById(R.id.textViewTitle)
         var textViewDesc: TextView = itemView.findViewById(R.id.textViewDesc)
@@ -116,6 +118,7 @@ class AchievementsAdapter(
                 btnComplete.setOnClickListener {
                     Log.d("Test: ", "btnComplete button clicked")
                     markAchievementComplete(achievementID, successfullyComplete, goal)
+
                 }
             }
             else if(popupWindowType == "popup_window_remove"){
