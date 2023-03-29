@@ -1,5 +1,7 @@
 package com.example.live_a_little
 
+import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +14,11 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class Profile : AppCompatActivity() {
 
@@ -21,6 +27,9 @@ class Profile : AppCompatActivity() {
     private lateinit var btnLogout: Button
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var txtDeleteAccount: TextView
+    private var usernameList = ArrayList<String>()
+    private lateinit var adapter: FriendsAdapter
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +40,8 @@ class Profile : AppCompatActivity() {
         btnAchievement= findViewById(R.id.achievements_button)
         btnLogout= findViewById(R.id.btnLogout)
         txtDeleteAccount = findViewById(R.id.delete_account_text)
+
+        populateFriends()
 
         btnHome.setOnClickListener{
             openHome()
@@ -93,6 +104,47 @@ class Profile : AppCompatActivity() {
         btnYes.setOnClickListener{
             Log.d("Test: ", "Yes button clicked")
         }
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun populateFriends(){
+        val db = Firebase.firestore
+        val user_id = firebaseAuth.uid.toString();
+        val friends = db.collection("users").document(user_id)
+            .collection("friends")
+
+        usernameList.clear()
+
+        // Initialise recycle view and adapter
+        recyclerView = findViewById(R.id.friendRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this@Profile)
+
+        adapter = FriendsAdapter(usernameList, this@Profile)
+        recyclerView.adapter = adapter
+
+        friends
+            .get()
+            .addOnCompleteListener { friends_documents ->
+                if (friends_documents.isSuccessful) {
+                    for (document in friends_documents.result) {
+                        val friends_data = FriendsModel(document)
+
+                        val friendId = document.id
+                        val friendUsername = friends_data.username
+
+                        if (friendUsername != null) {
+                            usernameList.add(friendUsername)
+                        }
+                        Log.d("Friends List", friends_data.toString())
+                        Log.d("Friends List", usernameList.toString())
+                    }
+                    adapter.notifyDataSetChanged()
+                }
+                else{
+                    Log.d(ContentValues.TAG, "Error getting documents: ", friends_documents.exception)
+                }
+            }
 
     }
 
