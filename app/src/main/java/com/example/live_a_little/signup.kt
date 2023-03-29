@@ -79,6 +79,7 @@ class Signup : AppCompatActivity() {
                     val user_email = firebaseAuth.currentUser?.email.toString()
 
                     val user_details = hashMapOf(
+                        "userID" to user_id,
                         "username" to user_name,
                         "email" to user_email
                     )

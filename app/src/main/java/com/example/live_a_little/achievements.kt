@@ -163,5 +163,5 @@ class Achievements : AppCompatActivity() {
                     Log.d(TAG, "Error getting documents: ", achievement_documents.exception)
                 }
         }
-     }
+    }
 }
