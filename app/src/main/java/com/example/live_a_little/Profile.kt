@@ -9,18 +9,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class Profile : AppCompatActivity() {
+class Profile : AppCompatActivity()  {
 
     private lateinit var btnHome: ImageButton
     private lateinit var btnAchievement: ImageButton
@@ -28,8 +26,10 @@ class Profile : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var txtDeleteAccount: TextView
     private var usernameList = ArrayList<String>()
+    private var userIDList = ArrayList<String>()
     private lateinit var adapter: FriendsAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +40,9 @@ class Profile : AppCompatActivity() {
         btnAchievement= findViewById(R.id.achievements_button)
         btnLogout= findViewById(R.id.btnLogout)
         txtDeleteAccount = findViewById(R.id.delete_account_text)
+        searchView = findViewById(R.id.search_bar)
+
+
 
         populateFriends()
 
@@ -63,7 +66,23 @@ class Profile : AppCompatActivity() {
         txtDeleteAccount.setOnClickListener{
             deleteAccountPopup()
         }
+
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(search: String?): Boolean {
+                if(!search.isNullOrEmpty()){
+                    addFriend(search)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
+
     }
+
 
     private fun openHome(){
         val intent = Intent(this, Home::class.java)
@@ -84,7 +103,7 @@ class Profile : AppCompatActivity() {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.popup_delete_confirmation, null)
 
-        val focusable = true // let user click outside to dismiss
+        val focusable = true
         val popupWindow = PopupWindow(
             popupView,
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -109,43 +128,166 @@ class Profile : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun populateFriends(){
+        firebaseAuth = FirebaseAuth.getInstance()
         val db = Firebase.firestore
-        val user_id = firebaseAuth.uid.toString();
-        val friends = db.collection("users").document(user_id)
+        val userId = firebaseAuth.uid.toString();
+
+        val friends = db.collection("users").document(userId)
             .collection("friends")
 
         usernameList.clear()
+        userIDList.clear()
 
         // Initialise recycle view and adapter
         recyclerView = findViewById(R.id.friendRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this@Profile)
 
-        adapter = FriendsAdapter(usernameList, this@Profile)
+        adapter = FriendsAdapter(usernameList, userIDList, this@Profile)
         recyclerView.adapter = adapter
 
         friends
             .get()
-            .addOnCompleteListener { friends_documents ->
-                if (friends_documents.isSuccessful) {
-                    for (document in friends_documents.result) {
-                        val friends_data = FriendsModel(document)
+            .addOnCompleteListener { friendsDocuments ->
+                if (friendsDocuments.isSuccessful) {
+                    for (document in friendsDocuments.result) {
+                        val friendsData = FriendsModel(document)
 
                         val friendId = document.id
-                        val friendUsername = friends_data.username
+                        val friendUsername = friendsData.username
+                        val friendID = document.id
 
                         if (friendUsername != null) {
                             usernameList.add(friendUsername)
+                            userIDList.add(friendID)
                         }
-                        Log.d("Friends List", friends_data.toString())
+                        Log.d("Friends List", friendsData.toString())
                         Log.d("Friends List", usernameList.toString())
                     }
                     adapter.notifyDataSetChanged()
                 }
                 else{
-                    Log.d(ContentValues.TAG, "Error getting documents: ", friends_documents.exception)
+                    Log.d(ContentValues.TAG, "Error getting documents: ", friendsDocuments.exception)
                 }
             }
 
     }
+    private fun addFriend(username: String){
+        firebaseAuth = FirebaseAuth.getInstance()
+        val db = Firebase.firestore
+        val userId = firebaseAuth.uid.toString();
 
+        val users = db.collection("users")
+        var userFriendMatch = false;
+
+        val friends = db.collection("users").document(userId)
+            .collection("friends")
+
+        friends
+            .whereEqualTo("username", username)
+            .get()
+            .addOnCompleteListener { friendsDocuments ->
+                if(friendsDocuments.isSuccessful){
+                    val friend = friendsDocuments.result
+
+                    if(friend.isEmpty){
+                        users
+                            .whereEqualTo("username", username)
+                            .get()
+                            .addOnCompleteListener { usersDocuments ->
+                                if (usersDocuments.isSuccessful) {
+                                    val user = usersDocuments.result
+
+                                    if(friend.isEmpty){
+                                        for (user in usersDocuments.result) {
+                                            val userData = UserModel(user)
+
+                                            followUser(username, userData)
+                                        }
+                                    }
+                                }
+
+                            }
+                    }
+                    else{
+                        Toast.makeText(this,
+                            "Already following user!",
+                            Toast.LENGTH_LONG).show()
+                    }
+                }
+
+        }
+    }
+
+
+
+//    private fun addFriend(username: String){
+//        firebaseAuth = FirebaseAuth.getInstance()
+//        val db = Firebase.firestore
+//        val userId = firebaseAuth.uid.toString();
+//
+//        val users = db.collection("users")
+//        var userFriendMatch = false;
+//
+//        val friends = db.collection("users").document(userId)
+//            .collection("friends")
+//
+//        friends
+//            .get()
+//            .addOnCompleteListener { friendsDocuments ->
+//
+//                for (friend in friendsDocuments.result) {
+//                    val friendsData = FriendsModel(friend)
+//
+//                    if(username == friendsData.username){
+//                        Toast.makeText(this, "Following User!", Toast.LENGTH_LONG).show()
+//                    }
+//                    else{
+//                        users
+//                            .get()
+//                            .addOnCompleteListener { usersDocuments ->
+//                                if (usersDocuments.isSuccessful) {
+//                                    for (user in usersDocuments.result) {
+//                                        val userData = UserModel(user)
+//                                        val usersUsername = userData.username
+//
+//                                        Log.d( "usersUsername:", usersUsername)
+//                                        Log.d( "userData.username:", userData.username)
+//
+//                                        if(username == usersUsername){
+//                                            followUser(username, userData)
+//                                        }
+//                                        else{
+//                                            Toast.makeText(this, "User does not exist", Toast.LENGTH_LONG).show()
+//                                        }
+//                                    }
+//                                }
+//                                else{
+//                                    Log.d(ContentValues.TAG, "Error getting documents: ", usersDocuments.exception)
+//                                }
+//                            }
+//                    }
+//                }
+//        }
+//    }
+
+    private fun followUser(username: String, userData: UserModel) {
+        firebaseAuth = FirebaseAuth.getInstance()
+        val db = Firebase.firestore
+        val userId = firebaseAuth.uid.toString();
+
+        val friends = db.collection("users").document(userId)
+            .collection("friends")
+
+        val friendData = hashMapOf(
+            "username" to userData.username,
+            "userId" to userData.userId
+        )
+
+        friends.add(friendData)
+
+        }
 }
+
+
+
+

@@ -23,5 +23,6 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="are_you_sure">Are you sure you’d like to remove this?</string>
+    <string name="are_you_sure_unfollow">Are you sure you’d like to unfollow this user?</string>
     <string name="delete_account_warning">Are you sure you’d like to delete your information?</string>
 </resources>

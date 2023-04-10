@@ -1,6 +1,7 @@
 package com.example.live_a_little
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import android.view.Gravity
@@ -12,7 +13,6 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -23,12 +23,14 @@ import com.google.firebase.ktx.Firebase
 
 class FriendsAdapter(
     var usernameList: ArrayList<String>,
+    var userIDList: ArrayList<String>,
     var context: Context) : RecyclerView.Adapter<FriendsAdapter.FriendViewHolder>() {
 
     private lateinit var firebaseAuth: FirebaseAuth
     var adapter: FriendsAdapter? = null
 
     class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textDelete: TextView = itemView.findViewById(R.id.textDelete)
         var textUsername: TextView = itemView.findViewById(R.id.textUsername)
         var cardView: CardView = itemView.findViewById(R.id.friendView)
         var constraintLayout: ConstraintLayout = itemView.findViewById(R.id.constraintLayout)
@@ -44,17 +46,48 @@ class FriendsAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
         holder.textUsername.text = usernameList[position]
-        holder.constraintLayout.setOnClickListener {
+        holder.textDelete.setOnClickListener {
 
             firebaseAuth = FirebaseAuth.getInstance()
             val db = Firebase.firestore
             val user_id = firebaseAuth.uid.toString();
 
+            val userID = userIDList[position]
+
             val friends = db.collection("users").document(user_id)
                 .collection("friends")
 
+            val documentToRemove = friends.document(userID)
+
             Toast.makeText(context, "Testing Friend", Toast.LENGTH_SHORT).show()
 
+            val inflater =
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val popupView: View
+
+            popupView = inflater.inflate(R.layout.popup_unfollow_confirmation, null)
+
+            // Designing the display of the popup window
+            val width = LinearLayout.LayoutParams.MATCH_PARENT
+            val height = LinearLayout.LayoutParams.MATCH_PARENT
+            val focusable = true // let user click outside to dismiss
+            val popupWindow = PopupWindow(popupView, width, height, focusable)
+
+            // displaying the popup window on screen
+            popupWindow.showAtLocation(holder.cardView, Gravity.CENTER, 0, 0)
+            popupWindow.setFocusable(false);
+
+            val btnUnfollowYes = popupView.findViewById<AppCompatButton>(R.id.btnUnfollowYes)
+            val btnUnfollowNo = popupView.findViewById<AppCompatButton>(R.id.btnUnfollowNo)
+
+            btnUnfollowYes.setOnClickListener {
+                documentToRemove.delete()
+                popupWindow.dismiss()
+            }
+
+            btnUnfollowNo.setOnClickListener {
+                popupWindow.dismiss()
+            }
 
         }
     }
@@ -62,4 +95,5 @@ class FriendsAdapter(
     override fun getItemCount(): Int {
         return usernameList.size
     }
+
 }
