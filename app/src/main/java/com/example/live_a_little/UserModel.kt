@@ -8,8 +8,8 @@ data class UserModel(
     var email: String = "",
 ) {
     constructor(user_document: DocumentSnapshot) : this(
-        user_document.getString("data.name")?: "",
-        user_document.getString("data.description")?: "",
-        user_document.getString("data.complete")?: ""
+        user_document.getString("userId")?: "",
+        user_document.getString("username")?: "",
+        user_document.getString("email")?: ""
     )
 }
