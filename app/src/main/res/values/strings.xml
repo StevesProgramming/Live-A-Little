@@ -17,6 +17,7 @@
     <string name="delete_account"><u>Delete Account</u></string>
     <string name="delete">Delete</string>
     <string name="friends_list">Friends List</string>
+    <string name="users_list">Users List</string>
     <string name="remove">Remove</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
@@ -24,5 +25,6 @@
     <string name="yes">Yes</string>
     <string name="are_you_sure">Are you sure you’d like to remove this?</string>
     <string name="are_you_sure_unfollow">Are you sure you’d like to unfollow this user?</string>
+    <string name="are_you_sure_delete">Are you sure you’d like to delete this user?</string>
     <string name="delete_account_warning">Are you sure you’d like to delete your information?</string>
 </resources>
