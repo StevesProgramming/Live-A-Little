@@ -200,6 +200,7 @@ class Profile : AppCompatActivity()  {
                                     if(friend.isEmpty){
                                         for (user in usersDocuments.result) {
                                             val userData = UserModel(user)
+                                            Log.d("Testing", userData.userId)
 
                                             followUser(username, userData)
                                         }
@@ -280,7 +281,7 @@ class Profile : AppCompatActivity()  {
 
         val friendData = hashMapOf(
             "username" to userData.username,
-            "userId" to userData.userId
+            "userID" to userData.userId
         )
 
         friends.add(friendData)
