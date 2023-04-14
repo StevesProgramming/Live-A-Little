@@ -78,6 +78,9 @@ class Signup : AppCompatActivity() {
                     val user_name = username
                     val user_email = firebaseAuth.currentUser?.email.toString()
 
+                    val users = db.collection("users")
+                    val achievements = db.collection("achievements")
+
                     val user_details = hashMapOf(
                         "userID" to user_id,
                         "username" to user_name,
@@ -85,12 +88,12 @@ class Signup : AppCompatActivity() {
                     )
 
                     if(it.isSuccessful){
-                        db.collection("users").document(user_id)
+                        users.document(user_id)
                             .set(user_details)
                             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
                             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
 
-                        db.collection("achievements")
+                        achievements
                             .get()
                             .addOnSuccessListener { achievement_documents ->
                                 for (document in achievement_documents) {
@@ -115,10 +118,10 @@ class Signup : AppCompatActivity() {
             }
         }
     }
-    private fun makeUserRecord(etUsername: String, etEmail: String){
-        data class User(val username: String, val email: String)
-        val userData = User(etUsername, etEmail)
-    }
+//    private fun makeUserRecord(etUsername: String, etEmail: String){
+//        data class User(val username: String, val email: String)
+//        val userData = User(etUsername, etEmail)
+//    }
     private fun openLogin(){
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
