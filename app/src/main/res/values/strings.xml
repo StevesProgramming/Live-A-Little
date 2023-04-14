@@ -27,4 +27,7 @@
     <string name="are_you_sure_unfollow">Are you sure you’d like to unfollow this user?</string>
     <string name="are_you_sure_delete">Are you sure you’d like to delete this user?</string>
     <string name="delete_account_warning">Are you sure you’d like to delete your information?</string>
+    <string name="home_header"><b>USERNAME</b> has achieved this week!</string>
+    <string name="home_header_date">20/08/2022</string>
+
 </resources>
