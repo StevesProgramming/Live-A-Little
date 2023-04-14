@@ -41,8 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         txtSignup.setOnClickListener {
-            val intent = Intent(this, Signup::class.java)
-            startActivity(intent)
+            openSignup()
         }
     }
 
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         else {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{
                 if(it.isSuccessful){
-                    Toast.makeText(this, "Login Successful", Toast.LENGTH_LONG).show()
+
                     checkAdmin(email)
                 }
                 else{
@@ -95,7 +94,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openHome(){
+        Toast.makeText(this, "Login Successful", Toast.LENGTH_LONG).show()
+
         val intent = Intent(this, Home::class.java)
+        startActivity(intent)
+    }
+
+    private fun openSignup(){
+        val intent = Intent(this, Signup::class.java)
         startActivity(intent)
     }
 
