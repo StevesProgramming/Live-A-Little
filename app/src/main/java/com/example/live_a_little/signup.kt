@@ -118,10 +118,6 @@ class Signup : AppCompatActivity() {
             }
         }
     }
-//    private fun makeUserRecord(etUsername: String, etEmail: String){
-//        data class User(val username: String, val email: String)
-//        val userData = User(etUsername, etEmail)
-//    }
     private fun openLogin(){
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

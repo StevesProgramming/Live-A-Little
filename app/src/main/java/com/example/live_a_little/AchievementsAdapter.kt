@@ -29,7 +29,6 @@ class AchievementsAdapter(
     var context: Context) : RecyclerView.Adapter<AchievementsAdapter.AchievementViewHolder>() {
 
     private lateinit var firebaseAuth: FirebaseAuth
-    var adapter: AchievementsAdapter? = null
 
     class AchievementViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textViewTitle: TextView = itemView.findViewById(R.id.textViewTitle)
@@ -219,7 +218,6 @@ class AchievementsAdapter(
             .collection("user_achievements").document(achievementID)
 
         if(task == "increase"){
-            val hashmap = hashMapOf<String, Int>()
             val successfullyComplete = successfullyComplete?.plus(1)
 
             val update = hashMapOf<String, Any>(
@@ -229,7 +227,6 @@ class AchievementsAdapter(
         }
 
         else if(task == "decrease"){
-            val hashmap = hashMapOf<String, Int>()
             if (successfullyComplete != null) {
                 if(successfullyComplete > 0){
                     val successfullyComplete = successfullyComplete?.minus(1)

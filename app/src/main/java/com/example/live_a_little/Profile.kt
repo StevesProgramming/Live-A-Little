@@ -43,8 +43,6 @@ class Profile : AppCompatActivity()  {
         txtDeleteAccount = findViewById(R.id.delete_account_text)
         searchView = findViewById(R.id.search_bar)
 
-
-
         populateFriends()
 
         btnHome.setOnClickListener{
@@ -84,7 +82,6 @@ class Profile : AppCompatActivity()  {
 
     }
 
-
     private fun openHome(){
         val intent = Intent(this, Home::class.java)
         startActivity(intent)
@@ -122,7 +119,7 @@ class Profile : AppCompatActivity()  {
         }
 
         btnYes.setOnClickListener{
-            Log.d("Test: ", "Yes button clicked")
+
         }
 
     }
@@ -153,7 +150,6 @@ class Profile : AppCompatActivity()  {
                     for (document in friendsDocuments.result) {
                         val friendsData = FriendsModel(document)
 
-                        val friendId = document.id
                         val friendUsername = friendsData.username
                         val friendID = document.id
 
@@ -161,16 +157,10 @@ class Profile : AppCompatActivity()  {
                             usernameList.add(friendUsername)
                             userIDList.add(friendID)
                         }
-                        Log.d("Friends List", friendsData.toString())
-                        Log.d("Friends List", usernameList.toString())
                     }
                     adapter.notifyDataSetChanged()
                 }
-                else{
-                    Log.d(ContentValues.TAG, "Error getting documents: ", friendsDocuments.exception)
-                }
             }
-
     }
     private fun addFriend(username: String){
         firebaseAuth = FirebaseAuth.getInstance()
@@ -178,7 +168,6 @@ class Profile : AppCompatActivity()  {
         val userId = firebaseAuth.uid.toString();
 
         val users = db.collection("users")
-        var userFriendMatch = false;
 
         val friends = db.collection("users").document(userId)
             .collection("friends")
@@ -198,18 +187,15 @@ class Profile : AppCompatActivity()  {
                             .get()
                             .addOnCompleteListener { usersDocuments ->
                                 if (usersDocuments.isSuccessful) {
-                                    val user = usersDocuments.result
-
                                     if(friend.isEmpty){
                                         for (user in usersDocuments.result) {
                                             val userData = UserModel(user)
                                             Log.d("Testing", userData.userId)
 
-                                            followUser(username, userData)
+                                            followUser(userData)
                                         }
                                     }
                                 }
-
                             }
                     }
                     else{
@@ -218,63 +204,10 @@ class Profile : AppCompatActivity()  {
                             Toast.LENGTH_LONG).show()
                     }
                 }
-
         }
     }
 
-
-
-//    private fun addFriend(username: String){
-//        firebaseAuth = FirebaseAuth.getInstance()
-//        val db = Firebase.firestore
-//        val userId = firebaseAuth.uid.toString();
-//
-//        val users = db.collection("users")
-//        var userFriendMatch = false;
-//
-//        val friends = db.collection("users").document(userId)
-//            .collection("friends")
-//
-//        friends
-//            .get()
-//            .addOnCompleteListener { friendsDocuments ->
-//
-//                for (friend in friendsDocuments.result) {
-//                    val friendsData = FriendsModel(friend)
-//
-//                    if(username == friendsData.username){
-//                        Toast.makeText(this, "Following User!", Toast.LENGTH_LONG).show()
-//                    }
-//                    else{
-//                        users
-//                            .get()
-//                            .addOnCompleteListener { usersDocuments ->
-//                                if (usersDocuments.isSuccessful) {
-//                                    for (user in usersDocuments.result) {
-//                                        val userData = UserModel(user)
-//                                        val usersUsername = userData.username
-//
-//                                        Log.d( "usersUsername:", usersUsername)
-//                                        Log.d( "userData.username:", userData.username)
-//
-//                                        if(username == usersUsername){
-//                                            followUser(username, userData)
-//                                        }
-//                                        else{
-//                                            Toast.makeText(this, "User does not exist", Toast.LENGTH_LONG).show()
-//                                        }
-//                                    }
-//                                }
-//                                else{
-//                                    Log.d(ContentValues.TAG, "Error getting documents: ", usersDocuments.exception)
-//                                }
-//                            }
-//                    }
-//                }
-//        }
-//    }
-
-    private fun followUser(username: String, userData: UserModel) {
+    private fun followUser(userData: UserModel) {
         firebaseAuth = FirebaseAuth.getInstance()
         val db = Firebase.firestore
         val userId = firebaseAuth.uid.toString();

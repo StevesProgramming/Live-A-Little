@@ -27,13 +27,10 @@ class AdminAdapter(
     var context: Context) : RecyclerView.Adapter<AdminAdapter.FriendViewHolder>() {
 
     private lateinit var firebaseAuth: FirebaseAuth
-    var adapter: AdminAdapter? = null
-
     class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textDelete: TextView = itemView.findViewById(R.id.textDelete)
         var textUsername: TextView = itemView.findViewById(R.id.textUsername)
         var cardView: CardView = itemView.findViewById(R.id.friendView)
-        var constraintLayout: ConstraintLayout = itemView.findViewById(R.id.constraintLayout)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
@@ -83,12 +80,10 @@ class AdminAdapter(
             btnDeleteNo.setOnClickListener {
                 popupWindow.dismiss()
             }
-
         }
     }
 
     override fun getItemCount(): Int {
         return usernameList.size
     }
-
 }

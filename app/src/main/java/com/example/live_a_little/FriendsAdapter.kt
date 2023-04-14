@@ -27,13 +27,11 @@ class FriendsAdapter(
     var context: Context) : RecyclerView.Adapter<FriendsAdapter.FriendViewHolder>() {
 
     private lateinit var firebaseAuth: FirebaseAuth
-    var adapter: FriendsAdapter? = null
 
     class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textDelete: TextView = itemView.findViewById(R.id.textDelete)
         var textUsername: TextView = itemView.findViewById(R.id.textUsername)
         var cardView: CardView = itemView.findViewById(R.id.friendView)
-        var constraintLayout: ConstraintLayout = itemView.findViewById(R.id.constraintLayout)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
@@ -58,8 +56,6 @@ class FriendsAdapter(
                 .collection("friends")
 
             val documentToRemove = friends.document(userID)
-
-            Toast.makeText(context, "Testing Friend", Toast.LENGTH_SHORT).show()
 
             val inflater =
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -88,12 +84,10 @@ class FriendsAdapter(
             btnUnfollowNo.setOnClickListener {
                 popupWindow.dismiss()
             }
-
         }
     }
 
     override fun getItemCount(): Int {
         return usernameList.size
     }
-
 }

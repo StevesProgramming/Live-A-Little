@@ -1,16 +1,9 @@
 package com.example.live_a_little
 
-import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -54,16 +47,12 @@ class Admin : AppCompatActivity() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
-
         })
-
     }
 
     private fun populateUsers(){
         firebaseAuth = FirebaseAuth.getInstance()
         val db = Firebase.firestore
-        val userId = firebaseAuth.uid.toString();
-
         val users = db.collection("users")
 
         usernameList.clear()
@@ -90,16 +79,10 @@ class Admin : AppCompatActivity() {
                             usernameList.add(userUsername)
                             userIDList.add(userID)
                         }
-                        Log.d("Users List", userUsername.toString())
-                        Log.d("Userss List", usernameList.toString())
                     }
                     adapter.notifyDataSetChanged()
                 }
-                else{
-                    Log.d(ContentValues.TAG, "Error getting documents: ", usersDocuments.exception)
-                }
             }
-
     }
 
     private fun deleteUser(username: String){

@@ -18,7 +18,6 @@ class Home : AppCompatActivity() {
     private lateinit var btnProfile: ImageButton
 
     private var usernameList = ArrayList<String>()
-    //private var achievementNameList = ArrayList<String>()
     private val achievements: MutableMap<Any, ArrayList<String>> = HashMap()
 
     private lateinit var firebaseAuth: FirebaseAuth
@@ -57,7 +56,7 @@ class Home : AppCompatActivity() {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun populateHome(){
+    private fun populateHome() {
         val db = Firebase.firestore
         val user_id = firebaseAuth.uid.toString();
 
@@ -65,24 +64,14 @@ class Home : AppCompatActivity() {
             .collection("friends")
 
         usernameList.clear()
-        //achievementNameList.clear()
         achievements.clear()
 
         // Initialise recycle view and adapter
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this@Home)
 
-        adapter = HomeAdapter(usernameList, achievements,this@Home)
+        adapter = HomeAdapter(usernameList, achievements, this@Home)
         recyclerView.adapter = adapter
-
-        // TODO: Switch to a dictionary key-value pair storage
-        /*  Reason: When having 2 lists I can loop through the lists
-            But there is no way of telling which achievements belong to which user
-            therefore having a dictionary would allow me to look at each key and output
-            each value associated with that key
-        */
-
-
 
         friends
             .get()
@@ -108,68 +97,13 @@ class Home : AppCompatActivity() {
                                     val achievement_data = AchievementsModel(userDocument)
                                     val achievementName = achievement_data.name
 
-                                    Log.d("Testing", achievementName)
-                                    Log.d("Testing", achievement_data.toString())
-
                                     achievementNameList.add(achievementName)
                                 }
-
-//                                for(achievementName in  achievementNameList){
-//                                    achievements[username].add(achievementName)
-//                                }
                                 achievements[username] = achievementNameList as ArrayList<String>
-
-                                Log.d("Testing 1", "1" + achievements[username].toString())
                                 adapter.notifyDataSetChanged()
                             }
                     }
-                    Log.d("Testing", usernameList.toString())
-                    //Log.d("Testing", achievementNameList.toString())
                 }
-
             }
-
-
-
-
-
-
-
-
-//        achievements
-//            .get()
-//            .addOnCompleteListener { achievement_documents ->
-//                if (achievement_documents.isSuccessful) {
-//                    for (document in achievement_documents.result) {
-//                        val achievement_data = AchievementsModel(document)
-//
-//                        val username = achievement_data.name
-//                        val achievementName = achievement_data.name
-
-
-//                        if (achievementName != null && achievementDesc != null) {
-//                            if(currentList == "incomplete" && achievementComplete == false){
-//                                achievementIDList.add(achievementId)
-//                                achievementNameList.add(achievementName)
-//                                achievementDescList.add(achievementDesc)
-//                                achievementCompleteList.add(achievementComplete)
-//                                achievementGoalList.add(achievementGoal)
-//                                achievementSuccessfulCompletionList.add(achievementSuccessfulCompletion)
-//                            }
-//                            else if(currentList == "complete" && achievementComplete == true){
-//                                achievementIDList.add(achievementId)
-//                                achievementNameList.add(achievementName)
-//                                achievementDescList.add(achievementDesc)
-//                                achievementCompleteList.add(achievementComplete)
-//                                achievementGoalList.add(achievementGoal)
-//                                achievementSuccessfulCompletionList.add(achievementSuccessfulCompletion)
-//                            }
-//                        }
-//                    }
-//                    adapter.notifyDataSetChanged()
-                }
-//                else{
-//                    Log.d(ContentValues.TAG, "Error getting documents: ", achievement_documents.exception)
-//                }
-//            }
+    }
 }

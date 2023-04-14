@@ -1,11 +1,9 @@
 package com.example.live_a_little
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
@@ -30,7 +28,6 @@ class Achievements : AppCompatActivity() {
     private var achievementGoalList = ArrayList<Int>()
     private var achievementSuccessfulCompletionList = ArrayList<Int>()
     private lateinit var adapter: AchievementsAdapter
-    private lateinit var achievementDbRef: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     lateinit var currentList: String;
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,9 +155,6 @@ class Achievements : AppCompatActivity() {
                         }
                     }
                     adapter.notifyDataSetChanged()
-                }
-                else{
-                    Log.d(TAG, "Error getting documents: ", achievement_documents.exception)
                 }
         }
     }
