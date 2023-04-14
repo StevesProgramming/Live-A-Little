@@ -26,6 +26,7 @@ class Profile : AppCompatActivity()  {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var txtDeleteAccount: TextView
     private var usernameList = ArrayList<String>()
+    private var achievementsNameList = ArrayList<String>()
     private var userIDList = ArrayList<String>()
     private lateinit var adapter: FriendsAdapter
     private lateinit var recyclerView: RecyclerView
@@ -181,6 +182,8 @@ class Profile : AppCompatActivity()  {
 
         val friends = db.collection("users").document(userId)
             .collection("friends")
+
+        achievementsNameList.clear()
 
         friends
             .whereEqualTo("username", username)
