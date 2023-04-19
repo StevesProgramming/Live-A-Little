@@ -14,8 +14,10 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -169,6 +171,7 @@ class AchievementsAdapter(
         val db = Firebase.firestore
         val user_id = firebaseAuth.uid.toString();
         val achievementID = achievementID as String
+        val timestamp = Timestamp.now()
 
         val achievements = db.collection("users").document(user_id)
             .collection("user_achievements").document(achievementID)
@@ -188,6 +191,12 @@ class AchievementsAdapter(
                 )
                 achievements.update(update)
             }
+
+            val update = hashMapOf<String, Any>(
+                "data.date" to timestamp
+            )
+            achievements.update(update)
+
         }
     }
 
@@ -203,7 +212,8 @@ class AchievementsAdapter(
 
         val update = hashMapOf<String, Any>(
             "data.complete" to false,
-            "data.successful_completions" to (successfullyComplete?.toInt() ?: 0)
+            "data.successful_completions" to (successfullyComplete?.toInt() ?: 0),
+            "data.date" to FieldValue.delete()
         )
         achievements.update(update)
     }
