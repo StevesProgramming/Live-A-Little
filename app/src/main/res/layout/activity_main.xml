@@ -57,12 +57,24 @@
         android:fontFamily="@font/inter"
         android:padding="5dip" />
 
+    <TextView
+        android:id="@+id/txtForgotPassword"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/inter"
+        android:text="@string/forgotPassword"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="italic" />
+
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="280dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button"
         android:fontFamily="@font/inter"
         android:text="@string/login"

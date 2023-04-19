@@ -18,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 class MainActivity : AppCompatActivity() {
     private lateinit var btnLogin: Button
     private lateinit var txtSignup: TextView
+    private lateinit var txtForgotPassword: TextView
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var dbRef: DatabaseReference
@@ -35,33 +36,18 @@ class MainActivity : AppCompatActivity() {
 
         btnLogin= findViewById(R.id.btnLogout)
         txtSignup = findViewById(R.id.txtSignup)
-
+        txtForgotPassword = findViewById(R.id.txtForgotPassword)
 
         btnLogin.setOnClickListener{
-            val email = etEmail.text.toString()
-            val password = etPassword.text.toString()
-            val auth = FirebaseAuth.getInstance()
-
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if(task.isSuccessful){
-                        val user = auth.currentUser
-
-                        if (user != null && user.isEmailVerified) {
-                            login()
-                        }
-                        else {
-                            Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    else {
-                        Toast.makeText(this, "Verification failed", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            login()
         }
 
         txtSignup.setOnClickListener {
             openSignup()
+        }
+
+        txtForgotPassword.setOnClickListener {
+            forgotPassword()
         }
     }
 
@@ -70,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         val email = etEmail.text.toString()
         val password = etPassword.text.toString()
+        val auth = FirebaseAuth.getInstance()
 
         if (email.isEmpty()) {
             etEmail.error = "Please enter an email"
@@ -80,7 +67,15 @@ class MainActivity : AppCompatActivity() {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{
                 if(it.isSuccessful){
 
-                    checkAdmin(email)
+                    val user = auth.currentUser
+
+                    if (user != null && user.isEmailVerified) {
+                        checkAdmin(email)
+                    }
+                    else {
+                        Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show()
+                    }
+
                 }
                 else{
                     Toast.makeText(this, "Username or password is incorrect", Toast.LENGTH_LONG).show()
@@ -88,7 +83,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun checkAdmin(email: String) {
         firebaseAuth = FirebaseAuth.getInstance()
@@ -128,6 +122,23 @@ class MainActivity : AppCompatActivity() {
     private fun openAdmin() {
         val intent = Intent(this, Admin::class.java)
         startActivity(intent)
+    }
+
+    private fun forgotPassword() {
+        val email = etEmail.text.toString()
+        val auth = FirebaseAuth.getInstance()
+
+        if (email.isEmpty()) {
+            etEmail.error = "Please enter an email"
+        }
+        else{
+            auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Reset password email sent", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
     }
 }
 
