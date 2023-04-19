@@ -3,10 +3,12 @@ package com.example.live_a_little
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.auth.FirebaseAuth
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         etEmail = findViewById(R.id.emailInput)
         etPassword = findViewById(R.id.passwordInput)
         dbRef = FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app")
@@ -33,8 +36,28 @@ class MainActivity : AppCompatActivity() {
         btnLogin= findViewById(R.id.btnLogout)
         txtSignup = findViewById(R.id.txtSignup)
 
+
         btnLogin.setOnClickListener{
-            login()
+            val email = etEmail.text.toString()
+            val password = etPassword.text.toString()
+            val auth = FirebaseAuth.getInstance()
+
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if(task.isSuccessful){
+                        val user = auth.currentUser
+
+                        if (user != null && user.isEmailVerified) {
+                            login()
+                        }
+                        else {
+                            Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    else {
+                        Toast.makeText(this, "Verification failed", Toast.LENGTH_SHORT).show()
+                    }
+                }
         }
 
         txtSignup.setOnClickListener {
@@ -60,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                     checkAdmin(email)
                 }
                 else{
-                    Toast.makeText(this, it.exception.toString(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Username or password is incorrect", Toast.LENGTH_LONG).show()
                 }
             }
         }

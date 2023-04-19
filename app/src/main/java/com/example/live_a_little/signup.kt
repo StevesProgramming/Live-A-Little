@@ -77,6 +77,7 @@ class Signup : AppCompatActivity() {
                     val user_id = firebaseAuth.uid.toString();
                     val user_name = username
                     val user_email = firebaseAuth.currentUser?.email.toString()
+                    val current_user = firebaseAuth.currentUser
 
                     val users = db.collection("users")
                     val achievements = db.collection("achievements")
@@ -92,7 +93,6 @@ class Signup : AppCompatActivity() {
                             .set(user_details)
                             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
                             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-
                         achievements
                             .get()
                             .addOnSuccessListener { achievement_documents ->
@@ -102,6 +102,16 @@ class Signup : AppCompatActivity() {
                                         .add(document)
                                 }
                             }
+                        current_user!!.sendEmailVerification()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Toast.makeText(this, "Email Verification Sent", Toast.LENGTH_LONG).show()
+                                }
+                                else{
+                                    Toast.makeText(this, "Error: Email Verification Not Sent", Toast.LENGTH_LONG).show()
+                                }
+                            }
+
                         Toast.makeText(this, "Signup Successful", Toast.LENGTH_LONG).show()
                         openLogin()
                     }
