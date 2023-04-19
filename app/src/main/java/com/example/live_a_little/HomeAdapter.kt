@@ -43,9 +43,11 @@ class HomeAdapter(
 
         holder.homeCardDesign.removeAllViews()
 
-        if (holder.titleCardView.childCount == 1) {
-            val titleCardView = createTitleCard(username)
-            holder.homeCardDesign.addView(titleCardView)
+        if (achievementNames != null) {
+            if (holder.titleCardView.childCount == 1 && achievementNames.isNotEmpty()) {
+                val titleCardView = createTitleCard(username)
+                holder.homeCardDesign.addView(titleCardView)
+            }
         }
 
         val layout = LinearLayout.LayoutParams(

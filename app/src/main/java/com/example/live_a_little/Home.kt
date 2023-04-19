@@ -8,10 +8,12 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.Date
 
 class Home : AppCompatActivity() {
     private lateinit var btnAchievement: ImageButton
@@ -87,8 +89,15 @@ class Home : AppCompatActivity() {
                         val users = db.collection("users").document(userId)
                             .collection("user_achievements")
 
+
+                        val currentDate = Timestamp.now()
+                        // Subtract 7 days from the current date
+                        // days, hours, minute, second, nanoseconds
+                        val sevenDaysAgo = Timestamp(currentDate.seconds - 7 * 24 * 60 * 60, 0)
+
+
                         users
-                            .whereEqualTo("data.complete", true)
+                            .whereGreaterThan("data.date", sevenDaysAgo)
                             .get()
                             .addOnCompleteListener { users_documents ->
                                 val achievementNameList = mutableListOf<String>()
@@ -99,6 +108,7 @@ class Home : AppCompatActivity() {
 
                                     achievementNameList.add(achievementName)
                                 }
+
                                 achievements[username] = achievementNameList as ArrayList<String>
                                 adapter.notifyDataSetChanged()
                             }
