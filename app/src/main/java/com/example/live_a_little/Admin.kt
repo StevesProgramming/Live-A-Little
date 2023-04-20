@@ -38,8 +38,7 @@ class Admin : AppCompatActivity() {
             populateUsers()
 
             btnLogout.setOnClickListener {
-                FirebaseAuth.getInstance().signOut();
-                openLogin()
+                logout()
             }
 
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
