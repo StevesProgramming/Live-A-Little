@@ -50,8 +50,6 @@ class Achievements : AppCompatActivity() {
         // Check the user is logged in
         if (firebaseAuth.currentUser != null) {
 
-            populateAchievements(currentList)
-
             btnComplete.setOnClickListener {
                 btnComplete.setBackgroundResource(R.drawable.frag_button_selected)
                 btnComplete.setTextColor(ContextCompat.getColor(this, R.color.white))
