@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -66,11 +67,8 @@ class MainActivity : AppCompatActivity() {
 
                     val user = auth.currentUser
 
-                    if (user != null && user.isEmailVerified) {
+                    if (user != null) {
                         checkAdmin(email)
-                    }
-                    else {
-                        Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show()
                     }
 
                 }
@@ -83,6 +81,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAdmin(email: String) {
         firebaseAuth = FirebaseAuth.getInstance()
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+
         val db = Firebase.firestore
 
         val admins = db.collection("admins")
@@ -95,8 +96,15 @@ class MainActivity : AppCompatActivity() {
                     val admin = adminsDocuments.result
 
                     if (admin.isEmpty) {
-                        openAchievements()
-                    } else {
+                        if (user != null) {
+                            if (user.isEmailVerified) {
+                                openAchievements()
+                            } else {
+                                Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                    else {
                         openAdmin()
                     }
                 }
