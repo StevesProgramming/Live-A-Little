@@ -28,26 +28,40 @@ class Admin : AppCompatActivity() {
 
         btnLogout= findViewById(R.id.btnLogout)
         searchView = findViewById(R.id.search_bar)
+        // Check the user is logged in
+        if (firebaseAuth.currentUser != null) {
 
-        populateUsers()
+            populateUsers()
 
-        btnLogout.setOnClickListener{
-            FirebaseAuth.getInstance().signOut();
-            openLogin()
-        }
+            btnLogout.setOnClickListener {
+                FirebaseAuth.getInstance().signOut();
+                openLogin()
+            }
 
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(search: String?): Boolean {
-                if(!search.isNullOrEmpty()){
-                    deleteUser(search)
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(search: String?): Boolean {
+                    if (!search.isNullOrEmpty()) {
+                        deleteUser(search)
+                    }
+                    return true
                 }
-                return true
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+            })
+        }
+        else {
+            logout()
+        }
+    }
+
+    private fun logout(){
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun populateUsers(){

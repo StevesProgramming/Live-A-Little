@@ -26,7 +26,7 @@ class Profile : AppCompatActivity()  {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var txtDeleteAccount: TextView
     private var usernameList = ArrayList<String>()
-    private var achievementsNameList = ArrayList<String>()
+    private var friendsNameList = ArrayList<String>()
     private var userIDList = ArrayList<String>()
     private lateinit var adapter: FriendsAdapter
     private lateinit var recyclerView: RecyclerView
@@ -42,44 +42,55 @@ class Profile : AppCompatActivity()  {
         btnLogout= findViewById(R.id.btnLogout)
         txtDeleteAccount = findViewById(R.id.delete_account_text)
         searchView = findViewById(R.id.search_bar)
+        // Check the user is logged in
+        if (firebaseAuth.currentUser != null) {
+            btnHome.setOnClickListener{
+                openHome()
+            }
 
-        populateFriends()
+            btnAchievement.setOnClickListener{
+                openAchievements()
+            }
 
-        btnHome.setOnClickListener{
-            openHome()
-        }
+            btnAchievement.setOnClickListener{
+                openAchievements()
+            }
 
-        btnAchievement.setOnClickListener{
-            openAchievements()
-        }
+            btnLogout.setOnClickListener{
+                logout()
+            }
 
-        btnAchievement.setOnClickListener{
-            openAchievements()
-        }
+            txtDeleteAccount.setOnClickListener{
+                deleteAccountPopup()
+            }
 
-        btnLogout.setOnClickListener{
-            FirebaseAuth.getInstance().signOut();
-            openLogin()
-        }
+            searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(search: String?): Boolean {
+                    if(!search.isNullOrEmpty()){
+                        addFriend(search)
 
-        txtDeleteAccount.setOnClickListener{
-            deleteAccountPopup()
-        }
-
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(search: String?): Boolean {
-                if(!search.isNullOrEmpty()){
-                    addFriend(search)
+                    }
+                    return true
                 }
-                return true
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
 
-        })
+            })
 
+            contentChangeListener()
+
+        } else {
+            logout()
+        }
+    }
+    private fun logout(){
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun openHome(){
@@ -92,36 +103,19 @@ class Profile : AppCompatActivity()  {
         startActivity(intent)
     }
 
-    private fun openLogin(){
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
+    private fun contentChangeListener() {
+        val db = Firebase.firestore
+        val user_id = firebaseAuth.uid.toString()
+        val friends = db.collection("users").document(user_id).collection("friends")
 
-    fun deleteAccountPopup(){
-        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(R.layout.popup_delete_confirmation, null)
+        friends.addSnapshotListener { value, error ->
+            if (error != null) {
+                return@addSnapshotListener
+            }
 
-        val focusable = true
-        val popupWindow = PopupWindow(
-            popupView,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            focusable
-        )
-
-        popupWindow.showAtLocation(txtDeleteAccount, Gravity.CENTER, 0, 0)
-
-        val btnNo = popupView.findViewById<AppCompatButton>(R.id.btnDeleteAccountNo)
-        val btnYes = popupView.findViewById<AppCompatButton>(R.id.btnDeleteAccountYes)
-
-        btnNo.setOnClickListener{
-            popupWindow.dismiss()
+            // Trigger populateAchievements() whenever a change occurs
+            populateFriends()
         }
-
-        btnYes.setOnClickListener{
-
-        }
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -172,7 +166,7 @@ class Profile : AppCompatActivity()  {
         val friends = db.collection("users").document(userId)
             .collection("friends")
 
-        achievementsNameList.clear()
+        friendsNameList.clear()
 
         friends
             .whereEqualTo("username", username)
@@ -222,7 +216,34 @@ class Profile : AppCompatActivity()  {
 
         friends.add(friendData)
 
+    }
+
+    fun deleteAccountPopup(){
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.popup_delete_confirmation, null)
+
+        val focusable = true
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            focusable
+        )
+
+        popupWindow.showAtLocation(txtDeleteAccount, Gravity.CENTER, 0, 0)
+
+        val btnNo = popupView.findViewById<AppCompatButton>(R.id.btnDeleteAccountNo)
+        val btnYes = popupView.findViewById<AppCompatButton>(R.id.btnDeleteAccountYes)
+
+        btnNo.setOnClickListener{
+            popupWindow.dismiss()
         }
+
+        btnYes.setOnClickListener{
+
+        }
+
+    }
 }
 
 

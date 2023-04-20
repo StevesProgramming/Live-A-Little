@@ -35,14 +35,21 @@ class Home : AppCompatActivity() {
         btnAchievement = findViewById(R.id.achievements_button)
         btnProfile = findViewById(R.id.profile_button)
 
-        populateHome()
+        // Check the user is logged in
+        if (firebaseAuth.currentUser != null) {
 
-        btnAchievement.setOnClickListener {
-            openAchievements()
+            populateHome()
+
+            btnAchievement.setOnClickListener {
+                openAchievements()
+            }
+
+            btnProfile.setOnClickListener {
+                openProfile()
+            }
         }
-
-        btnProfile.setOnClickListener {
-            openProfile()
+        else{
+            logout()
         }
     }
 
@@ -54,6 +61,14 @@ class Home : AppCompatActivity() {
     private fun openProfile() {
         val intent = Intent(this, Profile::class.java)
         startActivity(intent)
+    }
+
+    private fun logout(){
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
 
