@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                     val admin = adminsDocuments.result
 
                     if (admin.isEmpty) {
-                        openHome()
+                        openAchievements()
                     } else {
                         openAdmin()
                     }
@@ -104,10 +104,10 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun openHome(){
+    private fun openAchievements(){
         Toast.makeText(this, "Login Successful", Toast.LENGTH_LONG).show()
 
-        val intent = Intent(this, Home::class.java)
+        val intent = Intent(this, Achievements::class.java)
         startActivity(intent)
     }
 
