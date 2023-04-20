@@ -28,6 +28,10 @@ class Admin : AppCompatActivity() {
 
         btnLogout= findViewById(R.id.btnLogout)
         searchView = findViewById(R.id.search_bar)
+
+        // Initialise Firebase Authentication
+        firebaseAuth = FirebaseAuth.getInstance()
+
         // Check the user is logged in
         if (firebaseAuth.currentUser != null) {
 
