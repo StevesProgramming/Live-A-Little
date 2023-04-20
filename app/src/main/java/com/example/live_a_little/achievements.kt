@@ -82,15 +82,28 @@ class Achievements : AppCompatActivity() {
                 openProfile()
             }
 
+            contentChangeListener()
+
         } else {
-            openLogin()
-            finish()
+            logout()
         }
     }
-    private fun openLogin(){
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+
+    private fun contentChangeListener() {
+        val db = Firebase.firestore
+        val user_id = firebaseAuth.uid.toString()
+        val achievements = db.collection("users").document(user_id).collection("user_achievements")
+
+        achievements.addSnapshotListener { value, error ->
+            if (error != null) {
+                return@addSnapshotListener
+            }
+
+            // Trigger populateAchievements() whenever a change occurs
+            populateAchievements(currentList)
+        }
     }
+
     private fun openHome(){
         val intent = Intent(this, Home::class.java)
         startActivity(intent)
@@ -99,6 +112,14 @@ class Achievements : AppCompatActivity() {
         val intent = Intent(this, Profile::class.java)
         startActivity(intent)
     }
+    private fun logout(){
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun populateAchievements(currentList: String){
         val db = Firebase.firestore

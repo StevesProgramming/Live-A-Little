@@ -43,6 +43,7 @@ class AchievementsAdapter(
             , parent
             , false)
         return AchievementViewHolder(view)
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -105,12 +106,14 @@ class AchievementsAdapter(
                     Log.d("Test: ", "btnIncrementPlus button clicked")
                     val task = "increase"
                     increaseOrDecreaseSuccessfullyCompletions(achievementID, task, successfullyComplete)
+                    popupWindow.dismiss()
                 }
 
                 btnIncrementMinus.setOnClickListener {
                     Log.d("Test: ", "btnIncremementMinus button clicked")
                     val task = "decrease"
                     increaseOrDecreaseSuccessfullyCompletions(achievementID, task, successfullyComplete)
+                    popupWindow.dismiss()
                 }
             }
             else if(popupWindowType == "popup_window"){
@@ -119,7 +122,7 @@ class AchievementsAdapter(
                 btnComplete.setOnClickListener {
                     Log.d("Test: ", "btnComplete button clicked")
                     markAchievementComplete(achievementID, successfullyComplete, goal)
-
+                    popupWindow.dismiss()
                 }
             }
             else if(popupWindowType == "popup_window_remove"){
@@ -173,6 +176,7 @@ class AchievementsAdapter(
         val achievementID = achievementID as String
         val timestamp = Timestamp.now()
 
+
         val achievements = db.collection("users").document(user_id)
             .collection("user_achievements").document(achievementID)
 
@@ -181,22 +185,21 @@ class AchievementsAdapter(
                 val successfullyComplete = successfullyComplete.plus(1)
                 val update = hashMapOf<String, Any>(
                     "data.complete" to true,
-                    "data.successful_completions" to (successfullyComplete.toInt() ?: 0)
+                    "data.successful_completions" to (successfullyComplete.toInt() ?: 0),
+                    "data.date" to timestamp
                 )
                 achievements.update(update)
             }
             else{
+
+                Log.d("test", timestamp.toString())
+
                 val update = hashMapOf<String, Any>(
-                    "data.complete" to true
+                    "data.complete" to true,
+                    "data.date" to timestamp
                 )
                 achievements.update(update)
             }
-
-            val update = hashMapOf<String, Any>(
-                "data.date" to timestamp
-            )
-            achievements.update(update)
-
         }
     }
 
