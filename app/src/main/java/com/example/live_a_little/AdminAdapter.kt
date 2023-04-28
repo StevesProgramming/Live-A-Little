@@ -35,7 +35,7 @@ class AdminAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(
-            R.layout.friends_design, parent, false
+            R.layout.users_design, parent, false
         )
         return FriendViewHolder(view)
     }

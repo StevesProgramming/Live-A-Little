@@ -26,6 +26,7 @@
             android:layout_marginTop="2.5dp"
             android:background="@drawable/top_nav_background"
             android:queryHint="Enter name to delete user" />
+
     </LinearLayout>
 
 
