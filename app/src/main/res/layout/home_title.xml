@@ -23,33 +23,23 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@color/achievement_color">
+            android:layout_height="50dp"
+            android:background="@color/achievement_color"
+            android:foregroundGravity="center">
 
             <TextView
                 android:id="@+id/textViewTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="50dp"
                 android:fontFamily="@font/inter"
                 android:text="@string/home_header"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textViewTitleDate"
-                android:layout_width="82dp"
-                android:layout_height="19dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/inter"
-                android:text="@string/home_header_date"
-                android:textColor="@color/black"
-                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

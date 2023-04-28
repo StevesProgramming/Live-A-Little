@@ -10,11 +10,26 @@
     android:paddingTop="13dp"
     tools:context=".Signup">
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/incomplete_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="350dp"
+        android:layout_height="46dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/outline"
+        android:foreground="@drawable/outline"
+        android:text="@string/last_30_days"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="578dp"/>
+        android:layout_height="507dp" />
         <!--tools:listitem="@layout/home_card_design"-->
 
 

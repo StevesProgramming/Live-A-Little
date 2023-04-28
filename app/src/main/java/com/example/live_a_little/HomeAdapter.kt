@@ -81,7 +81,7 @@ class HomeAdapter(
     private fun createTitleCard(username: String): View? {
         val view = LayoutInflater.from(context).inflate(R.layout.home_title, null)
         val titleTextView = view.findViewById<TextView>(R.id.textViewTitle)
-        titleTextView.text = "$username - This weeks achievements!"
+        titleTextView.text = "$username's monthly achievements!"
 
         return view
     }
