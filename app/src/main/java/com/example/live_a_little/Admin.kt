@@ -12,7 +12,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.Calendar
 
-
 class Admin : AppCompatActivity() {
 
     private lateinit var firebaseAuth: FirebaseAuth
@@ -36,7 +35,7 @@ class Admin : AppCompatActivity() {
         // Check the user is logged in
         if (firebaseAuth.currentUser != null) {
 
-            populateUsers()
+            contentChangeListener()
 
             btnLogout.setOnClickListener {
                 logout()
@@ -66,6 +65,19 @@ class Admin : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+    }
+
+    private fun contentChangeListener() {
+        val db = Firebase.firestore
+        val users = db.collection("users")
+
+        users.addSnapshotListener { value, error ->
+            if (error != null) {
+                return@addSnapshotListener
+            }
+
+            populateUsers()
+        }
     }
 
     private fun populateUsers(){
@@ -164,11 +176,10 @@ class Admin : AppCompatActivity() {
                     }
                     else{
                         for (user in usersDocuments.result) {
-                            val userData = UserModel(user)
-                            val userID = userData.userId as String
                             val documentToRemove = db.collection("users").document(userId)
-
                             documentToRemove.delete()
+
+                            //FirebaseAuth.getInstance().deleteUser(userId)
                         }
                     }
                 }

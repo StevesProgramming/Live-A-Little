@@ -240,9 +240,25 @@ class Profile : AppCompatActivity()  {
         }
 
         btnYes.setOnClickListener{
-
+            removeUserFromFirebaseAuthenticaion()
+            removeUserFromFirestore()
         }
 
+    }
+
+    private fun removeUserFromFirebaseAuthenticaion(){
+        firebaseAuth = FirebaseAuth.getInstance()
+        val user = firebaseAuth.currentUser!!
+        user.delete()
+    }
+
+    private fun removeUserFromFirestore(){
+        firebaseAuth = FirebaseAuth.getInstance()
+        val db = Firebase.firestore
+        val userId = firebaseAuth.uid.toString();
+
+        val user = db.collection("users").document(userId)
+        user.delete()
     }
 }
 
