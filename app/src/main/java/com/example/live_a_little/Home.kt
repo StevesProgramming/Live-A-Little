@@ -106,13 +106,14 @@ class Home : AppCompatActivity() {
 
 
                         val currentDate = Timestamp.now()
-                        // Subtract 7 days from the current date
+                        // Subtract 30 days from the current date
                         // days, hours, minute, second, nanoseconds
-                        val sevenDaysAgo = Timestamp(currentDate.seconds - 7 * 24 * 60 * 60, 0)
+                        val thirtyDaysAgo =
+                            Timestamp(currentDate.seconds - 30 * 24 * 60 * 60, 0)
 
 
                         users
-                            .whereGreaterThan("data.date", sevenDaysAgo)
+                            .whereGreaterThan("data.date", thirtyDaysAgo)
                             .get()
                             .addOnCompleteListener { users_documents ->
                                 val achievementNameList = mutableListOf<String>()
