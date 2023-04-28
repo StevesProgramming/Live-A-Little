@@ -7,6 +7,7 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -44,7 +45,7 @@ class Admin : AppCompatActivity() {
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(search: String?): Boolean {
                     if (!search.isNullOrEmpty()) {
-                        deleteUser(search)
+                        deleteUserAccount(search)
                     }
                     return true
                 }
@@ -156,7 +157,7 @@ class Admin : AppCompatActivity() {
             }
     }
 
-    private fun deleteUser(username: String){
+    private fun deleteUserAccount(username: String){
         firebaseAuth = FirebaseAuth.getInstance()
         val db = Firebase.firestore
         val userId = firebaseAuth.uid.toString();
@@ -178,12 +179,9 @@ class Admin : AppCompatActivity() {
                         for (user in usersDocuments.result) {
                             val documentToRemove = db.collection("users").document(userId)
                             documentToRemove.delete()
-
-                            //FirebaseAuth.getInstance().deleteUser(userId)
                         }
                     }
                 }
-
             }
     }
 
