@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingTop="13dp"
     tools:context=".Signup">
@@ -22,7 +23,8 @@
             android:layout_height="50dp"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="2.5dp"
-            android:background="@drawable/top_nav_background" />
+            android:background="@drawable/top_nav_background"
+            android:queryHint="Enter name to follow friend" />
     </LinearLayout>
 
 
