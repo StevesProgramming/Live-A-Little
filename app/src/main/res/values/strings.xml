@@ -17,6 +17,7 @@
     <string name="incomplete">Incomplete</string>
     <string name="delete_account"><u>Delete Account</u></string>
     <string name="delete">Delete</string>
+    <string name="unfollow">Unfollow</string>
     <string name="friends_list">Friends List</string>
     <string name="users_list">Users List</string>
     <string name="remove">Remove</string>
@@ -30,5 +31,6 @@
     <string name="delete_account_warning">Are you sure you’d like to delete your information?</string>
     <string name="home_header"><b>USERNAME</b> has achieved this week!</string>
     <string name="home_header_date">20/08/2022</string>
+    <string name="last_30_days">Friend\'s Latest Achievements</string>
 
 </resources>
