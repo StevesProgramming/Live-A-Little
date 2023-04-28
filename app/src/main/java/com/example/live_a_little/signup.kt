@@ -141,7 +141,7 @@ class Signup : AppCompatActivity() {
         startActivity(intent)
     }
 
-    
+
     private fun lastActive(){
         firebaseAuth = FirebaseAuth.getInstance()
         val user_id = firebaseAuth.uid.toString();
