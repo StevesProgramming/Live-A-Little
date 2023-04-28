@@ -29,7 +29,7 @@ class FriendsAdapter(
     private lateinit var firebaseAuth: FirebaseAuth
 
     class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textDelete: TextView = itemView.findViewById(R.id.textDelete)
+        val textUnfollow: TextView = itemView.findViewById(R.id.textUnfollow)
         var textUsername: TextView = itemView.findViewById(R.id.textUsername)
         var cardView: CardView = itemView.findViewById(R.id.friendView)
     }
@@ -44,7 +44,7 @@ class FriendsAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
         holder.textUsername.text = usernameList[position]
-        holder.textDelete.setOnClickListener {
+        holder.textUnfollow.setOnClickListener {
 
             firebaseAuth = FirebaseAuth.getInstance()
             val db = Firebase.firestore

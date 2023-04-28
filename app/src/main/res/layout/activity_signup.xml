@@ -34,7 +34,8 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
-        android:padding="5dip" />
+        android:padding="5dp"
+        android:inputType="text"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -53,7 +54,8 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
-        android:padding="5dip" />
+        android:padding="5dp"
+        android:inputType="textEmailAddress"/>
 
     <TextView
         android:id="@+id/textView3"
@@ -72,7 +74,8 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
-        android:padding="5dip" />
+        android:padding="5dp"
+        android:inputType="textEmailAddress"/>
 
     <TextView
         android:id="@+id/delete_account_text"
@@ -91,7 +94,8 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
-        android:padding="5dip" />
+        android:padding="5dp"
+        android:inputType="textPassword"/>
 
     <TextView
         android:id="@+id/textView5"
@@ -102,7 +106,8 @@
         android:fontFamily="@font/inter"
         android:text="@string/confirm_password"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        />
 
     <EditText
         android:id="@+id/confirmPasswordInput"
@@ -110,7 +115,8 @@
         android:layout_height="33dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
-        android:padding="5dip" />
+        android:padding="5dp"
+        android:inputType="textPassword"/>
 
     <Button
         android:id="@+id/btnLogout"
