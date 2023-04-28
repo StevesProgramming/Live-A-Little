@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".Profile"
-    app:cardBackgroundColor="#EBF2FA">
+    app:cardBackgroundColor="#EBF2FA"
+    tools:context=".Profile">
 
     <!-- app:cardBackgroundColor="#E6FFFFFF"-->
 
@@ -34,7 +34,7 @@
             android:id="@+id/textUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="10dp"
             android:fontFamily="@font/inter"
             android:text="@string/username"
             android:textColor="@color/black"
@@ -47,7 +47,7 @@
             android:id="@+id/textDelete"
             android:layout_width="79dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginEnd="70dp"
             android:background="@drawable/delete_button"
             android:fontFamily="@font/inter"
             android:gravity="center"
