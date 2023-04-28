@@ -35,7 +35,8 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
         android:fontFamily="@font/inter"
-        android:padding="5dip" />
+        android:padding="5dp"
+        android:inputType="textEmailAddress"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -55,7 +56,8 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_text_box"
         android:fontFamily="@font/inter"
-        android:padding="5dip" />
+        android:inputType="textPassword"
+        android:padding="5dp" />
 
     <TextView
         android:id="@+id/txtForgotPassword"
