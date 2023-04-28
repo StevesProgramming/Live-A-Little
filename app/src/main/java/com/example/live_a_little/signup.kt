@@ -8,11 +8,13 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.Calendar
 
 class Signup : AppCompatActivity() {
     private lateinit var etUsername: EditText
@@ -102,6 +104,7 @@ class Signup : AppCompatActivity() {
                         current_user!!.sendEmailVerification()
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
+                                    lastActive()
                                     Toast.makeText(this,
                                         "Email Verification Sent",
                                         Toast.LENGTH_LONG).show()
@@ -136,5 +139,35 @@ class Signup : AppCompatActivity() {
     private fun openLogin(){
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+
+    
+    private fun lastActive(){
+        firebaseAuth = FirebaseAuth.getInstance()
+        val user_id = firebaseAuth.uid.toString();
+        val db = Firebase.firestore
+
+        val user = db.collection("users").document(user_id)
+
+        val year = 2016
+        val month = 0
+        val day = 1
+        val hour = 0
+        val minute = 0
+        val second = 1
+
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, year)
+        cal.set(Calendar.MONTH, month)
+        cal.set(Calendar.DAY_OF_MONTH, day)
+        cal.set(Calendar.HOUR_OF_DAY, hour)
+        cal.set(Calendar.MINUTE, minute)
+        cal.set(Calendar.SECOND, second)
+
+        val timestamp = cal.time
+        val update = hashMapOf<String, Any>(
+            "last_active" to timestamp
+        )
+        user.update(update)
     }
 }

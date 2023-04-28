@@ -6,10 +6,11 @@ import android.os.Bundle
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-
+import java.util.Calendar
 
 
 class Admin : AppCompatActivity() {
@@ -82,7 +83,48 @@ class Admin : AppCompatActivity() {
         adapter = AdminAdapter(usernameList, userIDList, this@Admin)
         recyclerView.adapter = adapter
 
+        val currentDate = Timestamp.now()
+        val twoYears =
+            Timestamp(currentDate.seconds - 30 * 24 * 60 * 60, 0)
+
+        val year = 2016
+        val month = 0
+        val day = 1
+        val hour = 0
+        val minute = 0
+        val second = 1
+
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, year)
+        cal.set(Calendar.MONTH, month)
+        cal.set(Calendar.DAY_OF_MONTH, day)
+        cal.set(Calendar.HOUR_OF_DAY, hour)
+        cal.set(Calendar.MINUTE, minute)
+        cal.set(Calendar.SECOND, second)
+
         users
+            .whereLessThan("last_active", twoYears)
+            .get()
+            .addOnCompleteListener { usersDocuments ->
+                if (usersDocuments.isSuccessful) {
+                    for (document in usersDocuments.result) {
+                        val usersData = UserModel(document)
+
+                        val userUsername = usersData.username
+                        val userID = document.id
+
+                        if (userUsername != null) {
+                            usernameList.add(userUsername)
+                            userIDList.add(userID)
+                        }
+                    }
+                    adapter.notifyDataSetChanged()
+                }
+            }
+
+
+        users
+            .whereEqualTo("last_active", cal.time)
             .get()
             .addOnCompleteListener { usersDocuments ->
                 if (usersDocuments.isSuccessful) {
