@@ -62,7 +62,8 @@ class MainActivity : AppCompatActivity() {
             etPassword.error = "Please enter a password"
         }
         else {
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener{
                 if(it.isSuccessful){
 
                     val user = auth.currentUser
@@ -73,7 +74,9 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 else{
-                    Toast.makeText(this, "Username or password is incorrect", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this,
+                        "Username or password is incorrect",
+                        Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -100,7 +103,9 @@ class MainActivity : AppCompatActivity() {
                             if (user.isEmailVerified) {
                                 openAchievements()
                             } else {
-                                Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this,
+                                    "Please verify your email",
+                                    Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -113,7 +118,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openAchievements(){
-        Toast.makeText(this, "Login Successful", Toast.LENGTH_LONG).show()
+        Toast.makeText(this,
+            "Login Successful",
+            Toast.LENGTH_LONG).show()
 
         val intent = Intent(this, Achievements::class.java)
         startActivity(intent)
@@ -140,7 +147,9 @@ class MainActivity : AppCompatActivity() {
             auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this, "Reset password email sent", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this,
+                            "Reset password email sent",
+                            Toast.LENGTH_SHORT).show()
                     }
                 }
         }
