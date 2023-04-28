@@ -7,10 +7,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.Timestamp
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -118,6 +120,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openAchievements(){
+        lastActive()
         Toast.makeText(this,
             "Login Successful",
             Toast.LENGTH_LONG).show()
@@ -153,6 +156,20 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
         }
+    }
+
+    private fun lastActive(){
+        firebaseAuth = FirebaseAuth.getInstance()
+        val user_id = firebaseAuth.uid.toString();
+        val db = Firebase.firestore
+
+        val user = db.collection("users").document(user_id)
+
+        val timestamp = Timestamp.now()
+        val update = hashMapOf<String, Any>(
+            "last_active" to timestamp
+        )
+        user.update(update)
     }
 }
 
