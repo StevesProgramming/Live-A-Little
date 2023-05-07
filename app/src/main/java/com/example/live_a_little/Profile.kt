@@ -88,7 +88,8 @@ class Profile : AppCompatActivity()  {
     private fun logout(){
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }
@@ -106,14 +107,14 @@ class Profile : AppCompatActivity()  {
     private fun contentChangeListener() {
         val db = Firebase.firestore
         val user_id = firebaseAuth.uid.toString()
-        val friends = db.collection("users").document(user_id).collection("friends")
+        val friends = db.collection("users")
+            .document(user_id).collection("friends")
 
         friends.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
             }
 
-            // Trigger populateAchievements() whenever a change occurs
             populateFriends()
         }
     }
@@ -240,13 +241,13 @@ class Profile : AppCompatActivity()  {
         }
 
         btnYes.setOnClickListener{
-            removeUserFromFirebaseAuthenticaion()
+            removeUserFromFirebaseAuthentication()
             removeUserFromFirestore()
         }
 
     }
 
-    private fun removeUserFromFirebaseAuthenticaion(){
+    private fun removeUserFromFirebaseAuthentication(){
         firebaseAuth = FirebaseAuth.getInstance()
         val user = firebaseAuth.currentUser!!
         user.delete()
@@ -254,10 +255,39 @@ class Profile : AppCompatActivity()  {
 
     private fun removeUserFromFirestore(){
         firebaseAuth = FirebaseAuth.getInstance()
-        val db = Firebase.firestore
         val userId = firebaseAuth.uid.toString();
 
-        val user = db.collection("users").document(userId)
+        //deleteSubCollections(userId)
+
+        val db = Firebase.firestore
+
+        val user = db.collection("users")
+            .document(userId)
+
+        val achievementSubCollection = db.collection("users")
+            .document(userId)
+            .collection("user_achievements")
+
+        val friendSubCollection = db.collection("users")
+            .document(userId)
+            .collection("friends")
+
+
+        achievementSubCollection
+            .get()
+            .addOnCompleteListener { achievements ->
+                for (achievement in achievements.result) {
+                    achievementSubCollection.document(achievement.id).delete()
+                }
+            }
+
+        friendSubCollection
+            .get()
+            .addOnCompleteListener { friends ->
+                for (friend in friends.result) {
+                    friendSubCollection.document(friend.id).delete()
+                }
+            }
         user.delete()
     }
 }
