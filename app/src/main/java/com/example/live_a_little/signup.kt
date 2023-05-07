@@ -75,7 +75,8 @@ class Signup : AppCompatActivity() {
             etConfirmPassword.error = "Please enter a password"
         } else {
             if(password == confirmPassword && email == confirmEmail){
-                firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{
+                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener{
                     val user_id = firebaseAuth.uid.toString();
                     val user_name = username
                     val user_email = firebaseAuth.currentUser?.email.toString()
@@ -96,7 +97,8 @@ class Signup : AppCompatActivity() {
                             .get()
                             .addOnSuccessListener { achievement_documents ->
                                 for (document in achievement_documents) {
-                                    db.collection("users").document(user_id)
+                                    db.collection("users")
+                                        .document(user_id)
                                         .collection("user_achievements")
                                         .add(document)
                                 }
