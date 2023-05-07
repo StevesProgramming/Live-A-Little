@@ -221,14 +221,18 @@ class AchievementsAdapter(
         achievements.update(update)
     }
 
-    fun increaseOrDecreaseSuccessfullyCompletions(achievementID: Any?, task: Any?, successfullyComplete: Int?) {
+    fun increaseOrDecreaseSuccessfullyCompletions(achievementID: Any?,
+                                                  task: Any?,
+                                                  successfullyComplete: Int?) {
         firebaseAuth = FirebaseAuth.getInstance()
         val db = Firebase.firestore
         val user_id = firebaseAuth.uid.toString();
         val achievementID = achievementID as String
 
-        val achievements = db.collection("users").document(user_id)
-            .collection("user_achievements").document(achievementID)
+        val achievements = db.collection("users")
+            .document(user_id)
+            .collection("user_achievements")
+            .document(achievementID)
 
         if(task == "increase"){
             val successfullyComplete = successfullyComplete?.plus(1)
