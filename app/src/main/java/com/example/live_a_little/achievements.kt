@@ -50,6 +50,7 @@ class Achievements : AppCompatActivity() {
         // Check the user is logged in
         if (firebaseAuth.currentUser != null) {
 
+            // Toggle complete button on in the top nav bar
             btnComplete.setOnClickListener {
                 btnComplete.setBackgroundResource(R.drawable.frag_button_selected)
                 btnComplete.setTextColor(ContextCompat.getColor(this, R.color.white))
@@ -61,6 +62,7 @@ class Achievements : AppCompatActivity() {
                 populateAchievements(currentList)
             }
 
+            // Toggle incomplete button on in the top nav bar
             btnIncomplete.setOnClickListener {
                 btnIncomplete.setBackgroundResource(R.drawable.frag_button_selected)
                 btnIncomplete.setTextColor(ContextCompat.getColor(this, R.color.white))
@@ -72,22 +74,28 @@ class Achievements : AppCompatActivity() {
                 populateAchievements(currentList)
             }
 
+            // Navigate to home screen
             btnHome.setOnClickListener {
                 openHome()
             }
 
+            // Navigate to profile screen
             btnProfile.setOnClickListener {
                 openProfile()
             }
 
+            // Set up a listener for changes in the DB to update display
             contentChangeListener()
 
         } else {
+
             logout()
         }
     }
 
     private fun contentChangeListener() {
+        // Listen for changes in the user_achievements sub collection within the users document
+        // Update screen on change
         val db = Firebase.firestore
         val user_id = firebaseAuth.uid.toString()
         val achievements = db.collection("users").document(user_id).collection("user_achievements")
@@ -111,6 +119,9 @@ class Achievements : AppCompatActivity() {
         startActivity(intent)
     }
     private fun logout(){
+        // Take user back to home screen and delete activity history in
+        // the event they are not logged into an account while on the screen
+
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -125,6 +136,7 @@ class Achievements : AppCompatActivity() {
         val achievements = db.collection("users").document(user_id)
             .collection("user_achievements")
 
+        // Clear all lists before populating to ensure only correct information is stored
         achievementIDList.clear()
         achievementNameList.clear()
         achievementDescList.clear()
@@ -140,11 +152,14 @@ class Achievements : AppCompatActivity() {
             achievementGoalList, achievementSuccessfulCompletionList, achievementIDList, this@Achievements)
         recyclerView.adapter = adapter
 
+        // Go through all the achievements in the users achievement list and store the details of each
+        // achievement into a list to display on screen later
         achievements
             .get()
             .addOnCompleteListener { achievement_documents ->
                 if (achievement_documents.isSuccessful) {
                     for (document in achievement_documents.result) {
+                        // Format the data through the achievements model class
                         val achievement_data = AchievementsModel(document)
 
                         val achievementName = achievement_data.name

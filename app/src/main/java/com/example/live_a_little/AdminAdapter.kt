@@ -48,6 +48,8 @@ class AdminAdapter(
             firebaseAuth = FirebaseAuth.getInstance()
             val userID = userIDList[position]
 
+            // Inflater give the ability to convert our xml layouts to objects to dynamically build
+            // the display of the recycler view
             val inflater =
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val popupView: View
@@ -68,7 +70,6 @@ class AdminAdapter(
             val btnDeleteNo = popupView.findViewById<AppCompatButton>(R.id.btnDeleteNo)
 
             btnDeleteYes.setOnClickListener {
-                Log.d("Delete", userID)
                 deleteSubCollections(userID)
                 popupWindow.dismiss()
             }
@@ -94,7 +95,7 @@ class AdminAdapter(
             .document(userID)
             .collection("friends")
 
-
+        // Delete the contents of the achievements sub collections
         achievementSubCollection
             .get()
             .addOnCompleteListener { achievements ->
@@ -103,6 +104,7 @@ class AdminAdapter(
                 }
             }
 
+        // Delete the contents of the friends sub collections
         friendSubCollection
             .get()
             .addOnCompleteListener { friends ->
@@ -110,6 +112,7 @@ class AdminAdapter(
                     friendSubCollection.document(friend.id).delete()
                 }
             }
+        // Delete the user document
         user.delete()
     }
 

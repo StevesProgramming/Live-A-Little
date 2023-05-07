@@ -34,6 +34,7 @@ class Signup : AppCompatActivity() {
 
         Firestore = FirebaseFirestore.getInstance()
 
+        // Initalise the views on the screen
         etUsername = findViewById(R.id.usernameInput)
         etEmail = findViewById(R.id.emailInput)
         etConfirmEmail = findViewById(R.id.confirmEmailInput)
@@ -63,6 +64,7 @@ class Signup : AppCompatActivity() {
         val password = etPassword.text.toString()
         val confirmPassword = etConfirmPassword.text.toString()
 
+        // Check for missing information to alert user view error message
         if (username.isEmpty()) {
             etUsername.error = "Please enter a username"
         } else if (email.isEmpty()) {
@@ -75,6 +77,7 @@ class Signup : AppCompatActivity() {
             etConfirmPassword.error = "Please enter a password"
         } else {
             if(password == confirmPassword && email == confirmEmail){
+                // Create user account via firebase authentication
                 firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener{
                     val user_id = firebaseAuth.uid.toString();
@@ -85,6 +88,7 @@ class Signup : AppCompatActivity() {
                     val users = db.collection("users")
                     val achievements = db.collection("achievements")
 
+                    // Make a hashmap of user details for storing in the firestore users collection
                     val user_details = hashMapOf(
                         "userID" to user_id,
                         "username" to user_name,
@@ -92,7 +96,11 @@ class Signup : AppCompatActivity() {
                     )
 
                     if(it.isSuccessful){
+                        // Store the hashmap of information
                         users.document(user_id).set(user_details)
+
+                        // Add all the default achievements from the reference achievements collection stored
+                        // on firebase to the user's subcollection user_achievements
                         achievements
                             .get()
                             .addOnSuccessListener { achievement_documents ->
@@ -103,6 +111,8 @@ class Signup : AppCompatActivity() {
                                         .add(document)
                                 }
                             }
+
+                        // Send verification email to the email the user signed up with
                         current_user!!.sendEmailVerification()
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
@@ -145,12 +155,15 @@ class Signup : AppCompatActivity() {
 
 
     private fun lastActive(){
+        // Set the user's last active time to 01/01/2016 00:00:01 for the purpose of identifying
+        // unverified accounts
         firebaseAuth = FirebaseAuth.getInstance()
         val user_id = firebaseAuth.uid.toString();
         val db = Firebase.firestore
 
         val user = db.collection("users").document(user_id)
 
+        // Creating the default last active time to store in the users firestore document
         val year = 2016
         val month = 0
         val day = 1

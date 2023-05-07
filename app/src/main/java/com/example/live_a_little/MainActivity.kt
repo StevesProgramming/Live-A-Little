@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Initalise the views on the screen
         etEmail = findViewById(R.id.emailInput)
         etPassword = findViewById(R.id.passwordInput)
         dbRef = FirebaseDatabase.getInstance("https://project-cw-34e62-default-rtdb.europe-west1.firebasedatabase.app")
@@ -58,22 +59,22 @@ class MainActivity : AppCompatActivity() {
         val password = etPassword.text.toString()
         val auth = FirebaseAuth.getInstance()
 
+        // Check email is empty/password is empty, if so produce error
         if (email.isEmpty()) {
             etEmail.error = "Please enter an email"
         } else if (password.isEmpty()) {
             etPassword.error = "Please enter a password"
         }
         else {
+            // Sign in with the user's details to firebase auth and pass details to checkAdmin()
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener{
                 if(it.isSuccessful){
-
                     val user = auth.currentUser
 
                     if (user != null) {
                         checkAdmin(email)
                     }
-
                 }
                 else{
                     Toast.makeText(this,
@@ -85,6 +86,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAdmin(email: String) {
+        // Check to see if the email matches a registered admin email
+        // If not open achievements page if email is verified
+        // If is then open admin screen
+
         firebaseAuth = FirebaseAuth.getInstance()
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
@@ -140,6 +145,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun forgotPassword() {
+        // Sends a reset password email to users email via firebase authentication
+
         val email = etEmail.text.toString()
         val auth = FirebaseAuth.getInstance()
 
@@ -159,6 +166,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun lastActive(){
+        // Updates "last_active" field in the users document in firestore
+
         firebaseAuth = FirebaseAuth.getInstance()
         val user_id = firebaseAuth.uid.toString();
         val db = Firebase.firestore

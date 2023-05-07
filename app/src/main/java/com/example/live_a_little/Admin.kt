@@ -45,6 +45,7 @@ class Admin : AppCompatActivity() {
                 logout()
             }
 
+            // Take search from search bar and send to deleteUserAccount()
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(search: String?): Boolean {
                     if (!search.isNullOrEmpty()) {
@@ -71,6 +72,7 @@ class Admin : AppCompatActivity() {
         finish()
     }
 
+    // Listen for changes in the user collection and updates the screen on change
     private fun contentChangeListener() {
         val db = Firebase.firestore
         val users = db.collection("users")
@@ -99,10 +101,16 @@ class Admin : AppCompatActivity() {
         adapter = AdminAdapter(usernameList, userIDList, this@Admin)
         recyclerView.adapter = adapter
 
+        // Get the current time
         val currentDate = Timestamp.now()
+        // Set a time of 2 years
         val twoYears =
             Timestamp(currentDate.seconds - 30 * 24 * 60 * 60, 0)
 
+        // Create a default time. In the DB the time for all users on signup is set to
+        // 01/01/2016 00:00:01
+        // If this time is found it means the user has not logged into the account
+        // this means they have no validated their email and can be considered inactive
         val year = 2016
         val month = 0
         val day = 1
@@ -118,6 +126,7 @@ class Admin : AppCompatActivity() {
         cal.set(Calendar.MINUTE, minute)
         cal.set(Calendar.SECOND, second)
 
+        // get all users who have been inactive for 2 years
         users
             .whereLessThan("last_active", twoYears)
             .get()
@@ -138,7 +147,8 @@ class Admin : AppCompatActivity() {
                 }
             }
 
-
+        // Get all users who have the same last active time of 01/01/2016 00:00:01
+        // these users are unverified users
         users
             .whereEqualTo("last_active", cal.time)
             .get()
@@ -160,11 +170,13 @@ class Admin : AppCompatActivity() {
             }
     }
 
+    // Deletes account based on userId from firestore
     private fun deleteUserAccount(username: String){
         firebaseAuth = FirebaseAuth.getInstance()
         val db = Firebase.firestore
         val users = db.collection("users")
 
+        // Get all users who match the name entered into the search bar
         users
             .whereEqualTo("username", username)
             .get()
@@ -172,17 +184,15 @@ class Admin : AppCompatActivity() {
                 if(usersDocuments.isSuccessful){
                     val userFound = usersDocuments.result
 
-                    Log.d("Test", "$userFound")
-
                     if(userFound.isEmpty){
                         Toast.makeText(this,
                             "User does not exist!",
                             Toast.LENGTH_LONG).show()
                     }
                     else{
+                        // Send userID to the deleteSubCollections() function
                         for(document in userFound.documents){
                             val userId = document.id
-                            Log.d("TEST", "Going into deleteSubCollections")
                             deleteSubCollections(userId)
                         }
 
@@ -207,7 +217,7 @@ class Admin : AppCompatActivity() {
             .document(userID)
             .collection("friends")
 
-
+        // Delete the contents of the achievements sub collections
         achievementSubCollection
             .get()
             .addOnCompleteListener { achievements ->
@@ -216,6 +226,7 @@ class Admin : AppCompatActivity() {
                 }
             }
 
+        // Delete the contents of the friends sub collections
         friendSubCollection
             .get()
             .addOnCompleteListener { friends ->
@@ -223,6 +234,8 @@ class Admin : AppCompatActivity() {
                     friendSubCollection.document(friend.id).delete()
                 }
             }
+
+        // Delete the user document
         user.delete()
     }
 

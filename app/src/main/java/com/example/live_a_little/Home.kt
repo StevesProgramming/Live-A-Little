@@ -106,12 +106,13 @@ class Home : AppCompatActivity() {
 
 
                         val currentDate = Timestamp.now()
+
                         // Subtract 30 days from the current date
                         // days, hours, minute, second, nanoseconds
                         val thirtyDaysAgo =
                             Timestamp(currentDate.seconds - 30 * 24 * 60 * 60, 0)
 
-
+                        // Get all users and achievements accomplished in the last 30 days
                         users
                             .whereGreaterThan("data.date", thirtyDaysAgo)
                             .get()
@@ -125,6 +126,8 @@ class Home : AppCompatActivity() {
                                     achievementNameList.add(achievementName)
                                 }
 
+                                // Create a dictionary of usernames and achievements
+                                // username is key and achievements list is value
                                 achievements[username] = achievementNameList as ArrayList<String>
                                 adapter.notifyDataSetChanged()
                             }

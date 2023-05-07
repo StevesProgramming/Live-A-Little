@@ -52,17 +52,21 @@ class AchievementsAdapter(
         holder.textViewDesc.text = descList[position]
         holder.cardView.setOnClickListener {
 
+            // Set each variable to the value within the list at the current position
+            //  E.g. position 2 would set goal = goalList[2]
             val achievementID = achievementIDList[position]
             val goal = goalList[position]
             val complete = completeList[position]
             val successfullyComplete = successfullyCompleteList[position]
 
+            // Inflater give the ability to convert our xml layouts to objects to dynamically build
+            // the display of the recycler view
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val popupView: View
 
             val popupWindowType: String
 
-            // deciding which popup to display based on whether the achievement
+            // Deciding which popup to display based on whether the achievement
             // is an incremental achievement or single task achievement
             if(complete == false){
                 if(goal > 1 && successfullyComplete != goal){
@@ -94,7 +98,7 @@ class AchievementsAdapter(
             textViewTitle.text = nameList[position]
             textViewDesc.text = descList[position]
 
-            // Popup logic
+            // Popup logic - decided which popup should be displayed
             if(popupWindowType == "popup_window_increment"){
                 val btnIncrementPlus = popupView.findViewById<AppCompatButton>(R.id.btnIncrementPlus)
                 val btnIncrementMinus = popupView.findViewById<AppCompatButton>(R.id.btnIncrementMinus)
@@ -103,14 +107,12 @@ class AchievementsAdapter(
                 btnIncrement.text = "$successfullyComplete/$goal Complete"
 
                 btnIncrementPlus.setOnClickListener {
-                    Log.d("Test: ", "btnIncrementPlus button clicked")
                     val task = "increase"
                     increaseOrDecreaseSuccessfullyCompletions(achievementID, task, successfullyComplete)
                     popupWindow.dismiss()
                 }
 
                 btnIncrementMinus.setOnClickListener {
-                    Log.d("Test: ", "btnIncremementMinus button clicked")
                     val task = "decrease"
                     increaseOrDecreaseSuccessfullyCompletions(achievementID, task, successfullyComplete)
                     popupWindow.dismiss()
@@ -120,7 +122,6 @@ class AchievementsAdapter(
                 val btnComplete = popupView.findViewById<AppCompatButton>(R.id.btnComplete)
 
                 btnComplete.setOnClickListener {
-                    Log.d("Test: ", "btnComplete button clicked")
                     markAchievementComplete(achievementID, successfullyComplete, goal)
                     popupWindow.dismiss()
                 }
@@ -129,7 +130,6 @@ class AchievementsAdapter(
                 val btnRemove = popupView.findViewById<AppCompatButton>(R.id.btnRemove)
 
                 btnRemove.setOnClickListener {
-                    Log.d("Test: ", "btnRemove button clicked")
                     popupWindow.dismiss()
 
                     val confirmInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -150,7 +150,6 @@ class AchievementsAdapter(
                     }
 
                     btnYes.setOnClickListener{
-                        Log.d("Test: ", "Yes button clicked")
                         markAchievementIncomplete(achievementID, successfullyComplete)
                         confirmPopupWindow.dismiss()
                     }
@@ -180,6 +179,7 @@ class AchievementsAdapter(
         val achievements = db.collection("users").document(user_id)
             .collection("user_achievements").document(achievementID)
 
+        // Creates an object of the data to be sent to firestore with update()
         if (successfullyComplete != null) {
             if(successfullyComplete < goal!!){
                 val successfullyComplete = successfullyComplete.plus(1)
@@ -191,9 +191,6 @@ class AchievementsAdapter(
                 achievements.update(update)
             }
             else{
-
-                Log.d("test", timestamp.toString())
-
                 val update = hashMapOf<String, Any>(
                     "data.complete" to true,
                     "data.date" to timestamp
@@ -213,6 +210,7 @@ class AchievementsAdapter(
         val achievements = db.collection("users").document(user_id)
             .collection("user_achievements").document(achievementID)
 
+        // Creates an object of the data to be sent to firestore with update()
         val update = hashMapOf<String, Any>(
             "data.complete" to false,
             "data.successful_completions" to (successfullyComplete?.toInt() ?: 0),
@@ -234,6 +232,7 @@ class AchievementsAdapter(
             .collection("user_achievements")
             .document(achievementID)
 
+        // Increases the number of attempts on the firestore document
         if(task == "increase"){
             val successfullyComplete = successfullyComplete?.plus(1)
 
@@ -242,7 +241,7 @@ class AchievementsAdapter(
             )
             achievements.update(update)
         }
-
+        // Decreases the number of attempts on the firestore document
         else if(task == "decrease"){
             if (successfullyComplete != null) {
                 if(successfullyComplete > 0){

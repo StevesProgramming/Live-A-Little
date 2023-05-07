@@ -1,12 +1,10 @@
 package com.example.live_a_little
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -36,6 +34,7 @@ class Profile : AppCompatActivity()  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
+        // Initalise the views on the screen
         firebaseAuth = FirebaseAuth.getInstance()
         btnHome= findViewById(R.id.home_button)
         btnAchievement= findViewById(R.id.achievements_button)
@@ -64,6 +63,7 @@ class Profile : AppCompatActivity()  {
                 deleteAccountPopup()
             }
 
+            // Take search from search bar and send to addFriend()
             searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(search: String?): Boolean {
                     if(!search.isNullOrEmpty()){
@@ -86,6 +86,8 @@ class Profile : AppCompatActivity()  {
         }
     }
     private fun logout(){
+        // Take user back to home screen and delete activity history in
+        // the event they are not logged into an account while on the screen
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
@@ -105,6 +107,7 @@ class Profile : AppCompatActivity()  {
     }
 
     private fun contentChangeListener() {
+        // Listen for changes in the user collection and updates the screen on change
         val db = Firebase.firestore
         val user_id = firebaseAuth.uid.toString()
         val friends = db.collection("users")
@@ -114,7 +117,6 @@ class Profile : AppCompatActivity()  {
             if (error != null) {
                 return@addSnapshotListener
             }
-
             populateFriends()
         }
     }
@@ -138,6 +140,8 @@ class Profile : AppCompatActivity()  {
         adapter = FriendsAdapter(usernameList, userIDList, this@Profile)
         recyclerView.adapter = adapter
 
+        // Go through all the friends in the users friends list and store the details of each
+        // into a list to display on screen later
         friends
             .get()
             .addOnCompleteListener { friendsDocuments ->
@@ -167,8 +171,10 @@ class Profile : AppCompatActivity()  {
         val friends = db.collection("users").document(userId)
             .collection("friends")
 
+        // Clears list to ensure correct information is stored
         friendsNameList.clear()
 
+        // gets all friends already present in the users friends list
         friends
             .whereEqualTo("username", username)
             .get()
@@ -176,7 +182,10 @@ class Profile : AppCompatActivity()  {
                 if(friendsDocuments.isSuccessful){
                     val friend = friendsDocuments.result
 
+                    // If the friend is empty the user is not friends with them.
                     if(friend.isEmpty){
+                        // Get all users from the users collection who match the username entered
+                        // in the search bar
                         users
                             .whereEqualTo("username", username)
                             .get()
@@ -185,14 +194,13 @@ class Profile : AppCompatActivity()  {
                                     if(friend.isEmpty){
                                         for (user in usersDocuments.result) {
                                             val userData = UserModel(user)
-                                            Log.d("Testing", userData.userId)
-
                                             followUser(userData)
                                         }
                                     }
                                 }
                             }
                     }
+                    // If the friend is not empty the user is already friends with them
                     else{
                         Toast.makeText(this,
                             "Already following user!",
@@ -203,6 +211,8 @@ class Profile : AppCompatActivity()  {
     }
 
     private fun followUser(userData: UserModel) {
+        // Find the username entered in the search bar which is in the users collection
+        // add their username and userID to the user's friends sub collection
         firebaseAuth = FirebaseAuth.getInstance()
         val db = Firebase.firestore
         val userId = firebaseAuth.uid.toString();
@@ -220,6 +230,8 @@ class Profile : AppCompatActivity()  {
     }
 
     fun deleteAccountPopup(){
+        // Dynamically build the popup window when trying to delete user account to request confirmation
+        // from the user that it was intentional
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.popup_delete_confirmation, null)
 
@@ -248,17 +260,16 @@ class Profile : AppCompatActivity()  {
     }
 
     private fun removeUserFromFirebaseAuthentication(){
+        // Remove personal information from the firebase authentication
         firebaseAuth = FirebaseAuth.getInstance()
         val user = firebaseAuth.currentUser!!
         user.delete()
     }
 
     private fun removeUserFromFirestore(){
+        // Remove personal information from the firestore
         firebaseAuth = FirebaseAuth.getInstance()
         val userId = firebaseAuth.uid.toString();
-
-        //deleteSubCollections(userId)
-
         val db = Firebase.firestore
 
         val user = db.collection("users")

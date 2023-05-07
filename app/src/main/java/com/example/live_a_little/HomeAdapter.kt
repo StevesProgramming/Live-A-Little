@@ -38,11 +38,14 @@ class HomeAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
 
+        // Get the username and achievement name based on location on the recycler view
         val username = usernameList[position]
         val achievementNames = achievements[username]
 
+        // Remove all default views
         holder.homeCardDesign.removeAllViews()
 
+        // Limit the titleCard to be output once instead of for every achievement
         if (achievementNames != null) {
             if (holder.titleCardView.childCount == 1 && achievementNames.isNotEmpty()) {
                 val titleCardView = createTitleCard(username)
@@ -50,6 +53,7 @@ class HomeAdapter(
             }
         }
 
+        // Hard code the design of the achievement views creation
         val layout = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -62,6 +66,8 @@ class HomeAdapter(
 
         holder.homeCardDesign.addView(achievementCardView)
 
+        // Add a achievement card for every achievement in the dictionary associated with the
+        // userId as the key
         if (achievementNames != null) {
             for (achievementName in achievementNames) {
                 val achievementCard = createAchievementCard(achievementName)
@@ -79,6 +85,7 @@ class HomeAdapter(
 
     @SuppressLint("SetTextI18n")
     private fun createTitleCard(username: String): View? {
+        // Code to create the title card views
         val view = LayoutInflater.from(context).inflate(R.layout.home_title, null)
         val titleTextView = view.findViewById<TextView>(R.id.textViewTitle)
         titleTextView.text = "$username's monthly achievements!"
@@ -87,6 +94,7 @@ class HomeAdapter(
     }
 
     private fun createAchievementCard(achievement: String): View? {
+        // Code to create the achievement card views
         val view = LayoutInflater.from(context).inflate(R.layout.home_achievement, null)
         val achievementTitleTextView = view.findViewById<TextView>(R.id.textViewAchievementTitle)
         achievementTitleTextView.text = achievement
