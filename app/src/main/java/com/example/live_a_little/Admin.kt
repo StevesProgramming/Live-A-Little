@@ -3,12 +3,15 @@ package com.example.live_a_little
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.Calendar
@@ -160,7 +163,6 @@ class Admin : AppCompatActivity() {
     private fun deleteUserAccount(username: String){
         firebaseAuth = FirebaseAuth.getInstance()
         val db = Firebase.firestore
-        val userId = firebaseAuth.uid.toString();
         val users = db.collection("users")
 
         users
@@ -170,19 +172,58 @@ class Admin : AppCompatActivity() {
                 if(usersDocuments.isSuccessful){
                     val userFound = usersDocuments.result
 
+                    Log.d("Test", "$userFound")
+
                     if(userFound.isEmpty){
                         Toast.makeText(this,
                             "User does not exist!",
                             Toast.LENGTH_LONG).show()
                     }
                     else{
-                        for (user in usersDocuments.result) {
-                            val documentToRemove = db.collection("users").document(userId)
-                            documentToRemove.delete()
+                        for(document in userFound.documents){
+                            val userId = document.id
+                            Log.d("TEST", "Going into deleteSubCollections")
+                            deleteSubCollections(userId)
                         }
+
                     }
+
                 }
             }
+    }
+
+    private fun deleteSubCollections(userID: String) {
+        firebaseAuth = FirebaseAuth.getInstance()
+        val db = Firebase.firestore
+
+        val user = db.collection("users")
+            .document(userID)
+
+        val achievementSubCollection = db.collection("users")
+            .document(userID)
+            .collection("user_achievements")
+
+        val friendSubCollection = db.collection("users")
+            .document(userID)
+            .collection("friends")
+
+
+        achievementSubCollection
+            .get()
+            .addOnCompleteListener { achievements ->
+                for (achievement in achievements.result) {
+                    achievementSubCollection.document(achievement.id).delete()
+                }
+            }
+
+        friendSubCollection
+            .get()
+            .addOnCompleteListener { friends ->
+                for (friend in friends.result) {
+                    friendSubCollection.document(friend.id).delete()
+                }
+            }
+        user.delete()
     }
 
     private fun openLogin(){

@@ -46,11 +46,7 @@ class AdminAdapter(
         holder.textDelete.setOnClickListener {
 
             firebaseAuth = FirebaseAuth.getInstance()
-            val db = Firebase.firestore
             val userID = userIDList[position]
-
-            val users = db.collection("users")
-            val documentToRemove = users.document(userID)
 
             val inflater =
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -73,7 +69,7 @@ class AdminAdapter(
 
             btnDeleteYes.setOnClickListener {
                 Log.d("Delete", userID)
-                documentToRemove.delete()
+                deleteSubCollections(userID)
                 popupWindow.dismiss()
             }
 
@@ -81,6 +77,40 @@ class AdminAdapter(
                 popupWindow.dismiss()
             }
         }
+    }
+
+    private fun deleteSubCollections(userID: String) {
+        firebaseAuth = FirebaseAuth.getInstance()
+        val db = Firebase.firestore
+
+        val user = db.collection("users")
+            .document(userID)
+
+        val achievementSubCollection = db.collection("users")
+            .document(userID)
+            .collection("user_achievements")
+
+        val friendSubCollection = db.collection("users")
+            .document(userID)
+            .collection("friends")
+
+
+        achievementSubCollection
+            .get()
+            .addOnCompleteListener { achievements ->
+                for (achievement in achievements.result) {
+                    achievementSubCollection.document(achievement.id).delete()
+                }
+            }
+
+        friendSubCollection
+            .get()
+            .addOnCompleteListener { friends ->
+                for (friend in friends.result) {
+                    friendSubCollection.document(friend.id).delete()
+                }
+            }
+        user.delete()
     }
 
     override fun getItemCount(): Int {
